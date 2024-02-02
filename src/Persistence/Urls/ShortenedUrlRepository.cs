@@ -8,8 +8,6 @@ public class ShortenedUrlRepository : Repository<ShortenedUrl>, IShortenedUrlRep
 {
     public ShortenedUrlRepository(ApplicationDbContext context) : base(context) {}
     
-    public ShortenedUrl? GetById(long id) => base.GetById(id);
-
     public ShortenedUrl? Get(Url url)
     {
         return Context.ShortenedUrls.SingleOrDefault(x => x.LongUrl == url);
