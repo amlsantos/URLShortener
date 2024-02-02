@@ -2,9 +2,9 @@
 
 namespace Application.UseCases.Urls.Commands;
 
-public class CreateUrlShortenerValidator : AbstractValidator<CreateUrlShortener>
+public class CreateUrlValidator : AbstractValidator<CreateUrl>
 {
-    public CreateUrlShortenerValidator()
+    public CreateUrlValidator()
     {
         RuleFor(x => x.Url).NotEmpty();
         RuleFor(x => x.Url).NotNull();

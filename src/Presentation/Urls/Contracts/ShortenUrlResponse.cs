@@ -2,5 +2,6 @@
 
 public record ShortenUrlResponse
 {
-    public string Url { get; init; }
+    public string OriginalUrl { get; set; }
+    public string ShortenUrl { get; init; }
 }

@@ -2,12 +2,11 @@
 
 public class Url
 {
-    public static readonly Url Empty = new(string.Empty);
-    
     private readonly string _value;
     public Url(string value)
     {
-        // validation
+        if (string.IsNullOrEmpty(value))
+            throw new InvalidOperationException("Cannot be empty");
         
         _value = value;
     }

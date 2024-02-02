@@ -1,5 +1,4 @@
-﻿using Domain;
-using Domain.Urls;
+﻿using Domain.Urls;
 using Persistence.Database;
 
 namespace Application.UseCases.Urls.Services;
@@ -15,16 +14,15 @@ public class UrlShorteningGenerator
         _generator = generator;
     }
 
-    public ShortenedUrl GenerateAsync(Url url)
+    public ShortenedUrl Generate(Url url)
     {
         var code = _generator.Generate();
         
-        // validate if is unique
-        var isPresent = _context.ShortenedUrls.Any(x => x.Code == code);
+        var isPresent = _context.ShortenedUrls.Any(x => x.Code == code || x.LongUrl == url);
         var isUnique = !isPresent;
 
         if (!isUnique)
-            throw new InvalidOperationException($"The code is not unique");
+            throw new InvalidOperationException($"The url {url.AsString()} is not unique. Please enter a different url");
 
         var shortUrl = new Url($"https://server:{code.AsString()}");
 

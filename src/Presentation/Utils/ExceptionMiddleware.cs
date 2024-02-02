@@ -61,11 +61,9 @@ public class ExceptionMiddleware
 
     private static IReadOnlyDictionary<string, string[]> GetErrors(Exception exception)
     {
-        IReadOnlyDictionary<string, string[]> errors = new Dictionary<string, string[]>();
-        
-        if (exception is ValidationException validationException) 
-            errors = validationException.ErrorsDictionary;
+        if (exception is not ValidationException validationException)
+            return new Dictionary<string, string[]>();
 
-        return errors;
+        return validationException.ErrorsDictionary;
     }
 }
