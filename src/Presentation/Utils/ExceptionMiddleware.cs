@@ -1,51 +1,71 @@
-﻿using System.Net;
-using System.Text.Json;
+﻿using System.Text.Json;
+using Application.Exceptions;
+using ApplicationException = Application.Exceptions.ApplicationException;
 
 namespace Presentation.Utils;
 
 public class ExceptionMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly ILogger _logger;
-    
+    private readonly ILogger<ExceptionMiddleware> _logger;
+
     public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
     {
         _next = next;
         _logger = logger;
     }
-    
-    public async Task InvokeAsync(HttpContext httpContext)
+
+    public async Task InvokeAsync(HttpContext context)
     {
         try
         {
-            await _next(httpContext);
+            await _next(context);
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            _logger.LogError($"Something went wrong: {ex}");
-            Console.WriteLine($"Something went wrong: {ex}");
-            
-            await HandleExceptionAsync(httpContext, ex);
+            _logger.LogError(e, e.Message);
+            await HandleExceptionAsync(context, e);
         }
-    }
-    
-    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
-    {
-        context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-        
-        await context.Response.WriteAsync(new ErrorDetails
-        {
-            StatusCode = context.Response.StatusCode,
-            Message = $"Internal Server Error from the custom middleware: {exception.Message}"
-        }.ToString());
     }
 
-    private sealed class ErrorDetails
+    private static async Task HandleExceptionAsync(HttpContext httpContext, Exception exception)
     {
-        public int StatusCode { get; init; }
-        public string? Message { get; init; }
-    
-        public override string ToString() => JsonSerializer.Serialize(this);
+        var statusCode = GetStatusCode(exception);
+        var response = new ErrorDetails
+        {
+            Title = GetTitle(exception),
+            StatusCode = statusCode,
+            Message = exception.Message,
+            Errors = GetErrors(exception)
+        };
+
+        httpContext.Response.ContentType = "application/json";
+        httpContext.Response.StatusCode = statusCode;
+
+        await httpContext.Response.WriteAsync(JsonSerializer.Serialize(response));
+    }
+
+    private static int GetStatusCode(Exception exception) =>
+        exception switch
+        {
+            ValidationException => StatusCodes.Status422UnprocessableEntity,
+            _ => StatusCodes.Status500InternalServerError
+        };
+
+    private static string GetTitle(Exception exception) =>
+        exception switch
+        {
+            ApplicationException applicationException => applicationException.Title,
+            _ => "Server Error"
+        };
+
+    private static IReadOnlyDictionary<string, string[]> GetErrors(Exception exception)
+    {
+        IReadOnlyDictionary<string, string[]> errors = new Dictionary<string, string[]>();
+        
+        if (exception is ValidationException validationException) 
+            errors = validationException.ErrorsDictionary;
+
+        return errors;
     }
 }
