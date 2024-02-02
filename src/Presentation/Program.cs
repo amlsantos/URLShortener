@@ -44,9 +44,6 @@ public static class Program
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
 
-        var section = configuration.GetSection(ConnectionStringsOptions.ConnectionStrings);
-        services.Configure<ConnectionStringsOptions>(section);
-        
         services.AddApplication();
         services.AddPersistence(configuration);
     }

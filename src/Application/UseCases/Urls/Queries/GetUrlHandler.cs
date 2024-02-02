@@ -1,6 +1,5 @@
 ﻿using Domain.Urls;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Persistence.Database;
 
 namespace Application.UseCases.Urls.Queries;

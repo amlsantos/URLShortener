@@ -8,10 +8,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfigurationManager manager)
     {
-        var section = manager.GetSection(ConnectionStringsOptions.ConnectionStrings);
-
-        // services.Configure<ConnectionStringsOptions>(section);
-        
+        services.Configure<ConnectionStringsOptions>(manager.GetSection(ConnectionStringsOptions.ConnectionStrings));
         services.AddDbContext<ApplicationDbContext>();
         
         return services;
