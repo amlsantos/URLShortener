@@ -1,4 +1,7 @@
 using System.Text.Json.Serialization;
+using Application;
+using Application.UseCases.Urls.Commands;
+using Persistence;
 using Persistence.Database;
 using Presentation.Utils;
 
@@ -38,9 +41,8 @@ public static class Program
             .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
-        
-        var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(assemblies));
+
+        services.AddApplication().AddPersistence();
     }
 
     private static void ConfigureApp(WebApplication app)
