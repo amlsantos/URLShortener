@@ -12,7 +12,7 @@ using Persistence.Database;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240202175738_v1")]
+    [Migration("20240202192008_v1")]
     partial class v1
     {
         /// <inheritdoc />

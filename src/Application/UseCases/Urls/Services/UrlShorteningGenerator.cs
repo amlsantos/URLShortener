@@ -1,16 +1,16 @@
-﻿using Domain.Urls;
-using Persistence.Database;
+﻿using Application.Interfaces;
+using Domain.Urls;
 
 namespace Application.UseCases.Urls.Services;
 
 public class UrlShorteningGenerator
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly CodeGenerator _generator;
 
-    public UrlShorteningGenerator(ApplicationDbContext context, CodeGenerator generator)
+    public UrlShorteningGenerator(IUnitOfWork unitOfWork, CodeGenerator generator)
     {
-        _context = context;
+        _unitOfWork = unitOfWork;
         _generator = generator;
     }
 
@@ -18,7 +18,7 @@ public class UrlShorteningGenerator
     {
         var code = _generator.Generate();
         
-        var isPresent = _context.ShortenedUrls.Any(x => x.Code == code || x.LongUrl == url);
+        var isPresent = _unitOfWork.ShortenedUrls.HasCode(code) || _unitOfWork.ShortenedUrls.HasUrl(url);
         var isUnique = !isPresent;
 
         if (!isUnique)

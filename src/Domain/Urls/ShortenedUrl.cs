@@ -1,16 +1,16 @@
-﻿namespace Domain.Urls;
+﻿using Domain.Common;
 
-public class ShortenedUrl
+namespace Domain.Urls;
+
+public class ShortenedUrl : Entity
 {
-    public Guid Id { get; init; }
     public Url LongUrl { get; init; }
     public Url ShortUrl { get; init; }
     public Code Code { get; init; }
     public DateTime CreatedOn { get; init; }
     
-    public ShortenedUrl(Url longUrl, Url shortUrl, Code code)
+    public ShortenedUrl(Url longUrl, Url shortUrl, Code code) : base()
     {
-        Id = Guid.NewGuid();
         LongUrl = longUrl;
         ShortUrl = shortUrl;
         Code = code;
