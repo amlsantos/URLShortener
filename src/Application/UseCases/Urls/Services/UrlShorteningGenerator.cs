@@ -24,7 +24,7 @@ public class UrlShorteningGenerator
         if (!isUnique)
             throw new InvalidOperationException($"The url {url.AsString()} is not unique. Please enter a different url");
 
-        var shortUrl = new Url($"https://server:{code.AsString()}");
+        var shortUrl = new Url($"https://short:{80}/{code.AsString()}");
 
         return new ShortenedUrl(url, shortUrl, code);
     }

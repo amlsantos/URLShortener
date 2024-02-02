@@ -11,7 +11,7 @@ public class GetUrlHandler : IRequestHandler<GetUrl, ShortenedUrl>
 
     public Task<ShortenedUrl> Handle(GetUrl request, CancellationToken cancellationToken)
     {
-        var url = new Url(request.Url);
+        var url = new Url(request.ShortUrl);
         var result = _unitOfWork.ShortenedUrls.Get(url);
 
         if (result is null)

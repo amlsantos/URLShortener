@@ -10,7 +10,7 @@ public class ShortenedUrlRepository : Repository<ShortenedUrl>, IShortenedUrlRep
     
     public ShortenedUrl? Get(Url url)
     {
-        return Context.ShortenedUrls.SingleOrDefault(x => x.LongUrl == url);
+        return Context.ShortenedUrls.SingleOrDefault(x => x.ShortUrl == url);
     }
 
     public bool HasCode(Code code)

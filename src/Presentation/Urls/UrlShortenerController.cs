@@ -14,9 +14,9 @@ public class UrlShortenerController : ControllerBase
     public UrlShortenerController(IMediator mediator) => _mediator = mediator;
 
     [HttpGet("[action]")]
-    public async Task<ShortenUrlResponse> Get(string url)
+    public async Task<ShortenUrlResponse> Get(string shortUrl)
     {
-        var query = new GetUrl { Url = url };
+        var query = new GetUrl { ShortUrl = shortUrl };
         var response = await _mediator.Send(query);
         
         return new ShortenUrlResponse

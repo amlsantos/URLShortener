@@ -5,5 +5,5 @@ namespace Application.UseCases.Urls.Queries;
 
 public record GetUrl : IRequest<ShortenedUrl>
 {
-    public string Url { get; init; }
+    public string ShortUrl { get; init; }
 }
