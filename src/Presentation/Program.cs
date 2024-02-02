@@ -1,44 +1,63 @@
-var builder = WebApplication.CreateBuilder(args);
+using System.Text.Json.Serialization;
+using Persistence.Database;
+using Presentation.Utils;
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+namespace Presentation;
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+public static class Program
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+        
+        var services = builder.Services;
+        ConfigureServices(services);
 
-app.UseHttpsRedirection();
+        var app = builder.Build();
+        ConfigureApp(app);
+        RunMigrations(app);
+        
+        app.Run();
+    }
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    private static void ConfigureServices(IServiceCollection services)
+    {
+        services.AddDbContext<ApplicationDbContext>();
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAllHeaders", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                }
+            );
+        });
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+        services.AddControllers()
+            .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
+        
+        var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(assemblies));
+    }
 
-app.Run();
+    private static void ConfigureApp(WebApplication app)
+    {
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+        app.UseMiddleware<ExceptionMiddleware>();
+        app.UseHttpsRedirection();
+        app.MapControllers();
+    }
+
+    private static void RunMigrations(WebApplication app)
+    {
+        
+    }
 }
