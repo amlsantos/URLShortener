@@ -12,7 +12,9 @@ public class CreateUrlShortenerHandler : IRequestHandler<CreateUrlShortener, Sho
 {
     public Task<ShortenedUrl> Handle(CreateUrlShortener request, CancellationToken cancellationToken)
     {
-        var result = new ShortenedUrl();
+        var url = new Url(request.Url);
+        var result = new ShortenedUrl(url, Url.Empty);
+        
         return Task.FromResult(result);
     }
 }

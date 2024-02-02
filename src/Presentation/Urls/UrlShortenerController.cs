@@ -25,7 +25,7 @@ public class UrlShortenerController : ControllerBase
         
         return new ShortenUrlResponse
         {
-            Url = ""
+            Url = response.ShortUrl.AsString()
         };
     }
 }

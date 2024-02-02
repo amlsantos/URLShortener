@@ -25,7 +25,6 @@ public static class Program
 
     private static void ConfigureServices(IServiceCollection services)
     {
-        services.AddDbContext<ApplicationDbContext>();
         services.AddCors(options =>
         {
             options.AddPolicy("AllowAllHeaders", builder =>
