@@ -9,5 +9,5 @@ public interface IShortenedUrlRepository
     public bool HasCode(Code code);
     public bool HasUrl(Url url);
     
-    public void Add(ShortenedUrl entity);
+    public void Add(ShortenedUrl url);
 }

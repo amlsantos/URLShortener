@@ -23,8 +23,8 @@ public class ShortenedUrlRepository : Repository<ShortenedUrl>, IShortenedUrlRep
         return Context.ShortenedUrls.Any(x => x.LongUrl == url);
     }
 
-    public void Add(ShortenedUrl entity)
+    public void Add(ShortenedUrl url)
     {
-        base.Add(entity);
+        base.Add(url);
     }
 }

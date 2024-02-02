@@ -11,10 +11,13 @@ public static class DependencyInjection
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfigurationManager manager)
     {
         services.Configure<ConnectionStringsOptions>(manager.GetSection(ConnectionStringsOptions.ConnectionStrings));
-        services.AddDbContext<ApplicationDbContext>();
-
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        
+        services.AddMemoryCache();
+        services.AddDbContext<ApplicationDbContext>();
+        
         services.AddScoped<IShortenedUrlRepository, ShortenedUrlRepository>();
+        services.Decorate<IShortenedUrlRepository, CachedUrlRepository>();
         
         return services;
     }
