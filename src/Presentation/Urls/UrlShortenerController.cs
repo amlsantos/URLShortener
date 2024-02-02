@@ -10,7 +10,6 @@ namespace Presentation.Urls;
 public class UrlShortenerController : ControllerBase
 {
     private readonly IMediator _mediator;
-
     public UrlShortenerController(IMediator mediator) => _mediator = mediator;
 
     [HttpPost("[action]")]

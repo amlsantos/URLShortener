@@ -1,4 +1,6 @@
-﻿using Domain;
+﻿using Application.UseCases.Urls.Services;
+using Domain;
+using Domain.Urls;
 using MediatR;
 
 namespace Application.UseCases.Urls.Commands;
@@ -10,11 +12,18 @@ public record CreateUrlShortener : IRequest<ShortenedUrl>
 
 public class CreateUrlShortenerHandler : IRequestHandler<CreateUrlShortener, ShortenedUrl>
 {
+    private readonly UrlShorteningGenerator _generator;
+    public CreateUrlShortenerHandler(UrlShorteningGenerator generator) => _generator = generator;
+
     public Task<ShortenedUrl> Handle(CreateUrlShortener request, CancellationToken cancellationToken)
     {
         var url = new Url(request.Url);
-        var result = new ShortenedUrl(url, Url.Empty);
+
+        var shortenedUrl = _generator.GenerateAsync(url);
         
-        return Task.FromResult(result);
+        // persist
+        
+        
+        return Task.FromResult(shortenedUrl);
     }
 }

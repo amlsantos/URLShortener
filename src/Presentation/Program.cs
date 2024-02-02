@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using Application;
 using Application.UseCases.Urls.Commands;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Persistence.Database;
 using Presentation.Utils;
@@ -14,7 +15,9 @@ public static class Program
         var builder = WebApplication.CreateBuilder(args);
         
         var services = builder.Services;
-        ConfigureServices(services);
+        var configuration = builder.Configuration;
+        
+        ConfigureServices(services, configuration);
 
         var app = builder.Build();
         ConfigureApp(app);
@@ -23,7 +26,7 @@ public static class Program
         app.Run();
     }
 
-    private static void ConfigureServices(IServiceCollection services)
+    private static void ConfigureServices(IServiceCollection services, IConfigurationManager configuration)
     {
         services.AddCors(options =>
         {
@@ -41,7 +44,11 @@ public static class Program
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
 
-        services.AddApplication().AddPersistence();
+        var section = configuration.GetSection(ConnectionStringsOptions.ConnectionStrings);
+        services.Configure<ConnectionStringsOptions>(section);
+        
+        services.AddApplication();
+        services.AddPersistence(configuration);
     }
 
     private static void ConfigureApp(WebApplication app)
@@ -57,8 +64,11 @@ public static class Program
         app.MapControllers();
     }
 
-    private static void RunMigrations(WebApplication app)
+    private static void RunMigrations(IHost app)
     {
-        
+        using var scope = app.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        context.Database.Migrate();
     }
 }
