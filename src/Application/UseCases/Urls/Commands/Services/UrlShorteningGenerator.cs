@@ -1,7 +1,7 @@
 ﻿using Application.Interfaces;
 using Domain.Urls;
 
-namespace Application.UseCases.Urls.Services;
+namespace Application.UseCases.Urls.Commands.Services;
 
 public class UrlShorteningGenerator
 {

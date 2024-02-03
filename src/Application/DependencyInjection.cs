@@ -1,5 +1,5 @@
 ﻿using Application.Behaviours;
-using Application.UseCases.Urls.Services;
+using Application.UseCases.Urls.Commands.Services;
 using Domain.Urls;
 using FluentValidation;
 using MediatR;
