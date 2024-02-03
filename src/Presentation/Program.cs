@@ -1,6 +1,5 @@
-using System.Text.Json.Serialization;
 using Application;
-using Application.UseCases.Urls.Commands;
+using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Persistence.Database;
@@ -39,13 +38,13 @@ public static class Program
             );
         });
 
-        services.AddControllers()
-            .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+        services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
 
-        services.AddApplication();
-        services.AddPersistence(configuration);
+        services.AddApplication()
+            .AddInfrastructure(configuration)
+            .AddPersistence(configuration);
     }
 
     private static void ConfigureApp(WebApplication app)
@@ -57,6 +56,7 @@ public static class Program
         }
 
         app.UseMiddleware<ExceptionMiddleware>();
+        app.UseInfrastructure();
         app.UseHttpsRedirection();
         app.MapControllers();
     }
