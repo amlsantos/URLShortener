@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Application.Interfaces;
+using Infrastructure.Loggers;
+using MediatR;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WatchDog;
@@ -10,6 +13,9 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfigurationManager manager)
     {
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+        services.AddScoped<IConsoleLogger, ConsoleLogger>();
+
         services.AddWatchDogServices(options =>
         {
             options.SetExternalDbConnString = manager.GetConnectionString(WatchdogOptions.DefaultConnection);
@@ -17,6 +23,8 @@ public static class DependencyInjection
         });
         
         services.Configure<WatchdogOptions>(manager.GetSection(WatchdogOptions.Watchdog));
+
+        services.Decorate<IConsoleLogger, WatchDogLogger>();
         
         return services;
     }

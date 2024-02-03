@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Application.Exceptions;
+using Application.Interfaces;
 using ApplicationException = Application.Exceptions.ApplicationException;
 
 namespace Presentation.Utils;
@@ -7,15 +8,9 @@ namespace Presentation.Utils;
 public class ExceptionMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly ILogger<ExceptionMiddleware> _logger;
+    public ExceptionMiddleware(RequestDelegate next) => _next = next;
 
-    public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
-    {
-        _next = next;
-        _logger = logger;
-    }
-
-    public async Task InvokeAsync(HttpContext context)
+    public async Task InvokeAsync(HttpContext context, IConsoleLogger consoleLogger)
     {
         try
         {
@@ -23,7 +18,8 @@ public class ExceptionMiddleware
         }
         catch (Exception e)
         {
-            _logger.LogError(e, e.Message);
+            consoleLogger.LogError(e, e.Message);
+            
             await HandleExceptionAsync(context, e);
         }
     }

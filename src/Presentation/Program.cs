@@ -56,6 +56,7 @@ public static class Program
         }
 
         app.UseMiddleware<ExceptionMiddleware>();
+        
         app.UseInfrastructure();
         app.UseHttpsRedirection();
         app.MapControllers();

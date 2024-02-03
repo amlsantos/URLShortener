@@ -1,4 +1,5 @@
-﻿using Application.UseCases.Urls.Commands;
+﻿using Application.Interfaces;
+using Application.UseCases.Urls.Commands;
 using Application.UseCases.Urls.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -11,11 +12,19 @@ namespace Presentation.Urls;
 public class UrlShortenerController : ControllerBase
 {
     private readonly ISender _mediator;
-    public UrlShortenerController(IMediator mediator) => _mediator = mediator;
+    private readonly IConsoleLogger _logger;
+    
+    public UrlShortenerController(IMediator mediator, IConsoleLogger logger)
+    {
+        _mediator = mediator;
+        _logger = logger;
+    }
 
     [HttpGet("[action]")]
     public async Task<ShortenUrlResponse> Get(string shortUrl)
     {
+        _logger.LogInformation($"");
+        
         var query = new GetUrl { ShortUrl = shortUrl };
         var response = await _mediator.Send(query);
         
