@@ -16,16 +16,14 @@ public static class DependencyInjection
     {
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
         services.AddScoped<IConsoleLogger, ConsoleLogger>();
-
+        services.Decorate<IConsoleLogger, WatchDogLogger>();
+        
+        services.Configure<WatchdogOptions>(manager.GetSection(WatchdogOptions.Watchdog));
         services.AddWatchDogServices(options =>
         {
             options.SetExternalDbConnString = manager.GetConnectionString(WatchdogOptions.DefaultConnection);
             options.DbDriverOption = WatchDogDbDriverEnum.MSSQL;
         });
-        
-        services.Configure<WatchdogOptions>(manager.GetSection(WatchdogOptions.Watchdog));
-
-        services.Decorate<IConsoleLogger, WatchDogLogger>();
         
         return services;
     }

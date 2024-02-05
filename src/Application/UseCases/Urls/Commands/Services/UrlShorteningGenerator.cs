@@ -7,9 +7,9 @@ namespace Application.UseCases.Urls.Commands.Services;
 public class UrlShorteningGenerator
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly CodeGenerator _generator;
+    private readonly ICodeGenerator _generator;
 
-    public UrlShorteningGenerator(IUnitOfWork unitOfWork, CodeGenerator generator)
+    public UrlShorteningGenerator(IUnitOfWork unitOfWork, ICodeGenerator generator)
     {
         _unitOfWork = unitOfWork;
         _generator = generator;

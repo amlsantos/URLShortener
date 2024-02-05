@@ -1,4 +1,5 @@
 using Application;
+using Domain;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -40,7 +41,8 @@ public static class Program
 
         services.AddApplication()
             .AddInfrastructure(configuration)
-            .AddPersistence(configuration);
+            .AddPersistence(configuration)
+            .AddDomain();
     }
 
     private static void ConfigureApp(WebApplication app)

@@ -2,7 +2,7 @@
 
 namespace Domain.Urls;
 
-public class CodeGenerator
+public class CodeGenerator : ICodeGenerator
 {
     private readonly Random _random = new();
     private const string Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
