@@ -3,7 +3,7 @@ using System.Text.Json;
 using Application.Interfaces;
 using MediatR;
 
-namespace Infrastructure.Loggers;
+namespace Infrastructure.Behaviours;
 
 public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : class, IRequest<TResponse>
 {

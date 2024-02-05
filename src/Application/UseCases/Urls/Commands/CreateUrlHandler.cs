@@ -21,8 +21,6 @@ public class CreateUrlHandler : IRequestHandler<CreateUrl, ShortenedUrl>
         var url = new Url(request.Url);
         var shortenedUrl = _generator.Generate(url);
         
-        // validate if url is present in the database
-
         _unitOfWork.ShortenedUrls.Add(shortenedUrl);
         _unitOfWork.SaveChanges();
         

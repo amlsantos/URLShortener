@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Infrastructure.Behaviours;
 using Infrastructure.Loggers;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
