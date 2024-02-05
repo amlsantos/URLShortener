@@ -1,4 +1,5 @@
 ﻿using Application.Behaviours;
+using Application.Interfaces;
 using Application.UseCases.Urls.Commands.Services;
 using Domain.Urls;
 using FluentValidation;
@@ -19,7 +20,7 @@ public static class DependencyInjection
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
 
         services.AddScoped<CodeGenerator>();
-        services.AddScoped<UrlShorteningGenerator>();
+        services.AddScoped<IUrlShorteningGenerator, UrlShorteningGenerator>();
         
         return services;
     }

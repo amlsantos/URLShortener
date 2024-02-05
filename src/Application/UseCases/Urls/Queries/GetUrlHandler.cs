@@ -12,9 +12,13 @@ public class GetUrlHandler : IRequestHandler<GetUrl, Result<ShortenedUrl>>
 
     public async Task<Result<ShortenedUrl>> Handle(GetUrl request, CancellationToken cancellationToken)
     {
-        var url = new Url(request.ShortUrl);
-        
+        var urlOrError = Url.Create(request.ShortUrl);
+        if (urlOrError.IsFailure)
+            return Result.Failure<ShortenedUrl>(urlOrError.Error);
+
+        var url = urlOrError.Value;
         var urlOrNothing = await _unitOfWork.ShortenedUrls.Get(url);
+        
         if (urlOrNothing.HasNoValue)
             return Result.Failure<ShortenedUrl>($"There is no url in the database: {request.ShortUrl}");
 

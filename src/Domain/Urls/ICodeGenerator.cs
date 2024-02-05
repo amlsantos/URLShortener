@@ -1,6 +1,8 @@
-﻿namespace Domain.Urls;
+﻿using CSharpFunctionalExtensions;
+
+namespace Domain.Urls;
 
 public interface ICodeGenerator
 {
-    public Code Generate();
+    public Result<Code> Generate();
 }

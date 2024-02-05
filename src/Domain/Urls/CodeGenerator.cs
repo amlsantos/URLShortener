@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using CSharpFunctionalExtensions;
 
 namespace Domain.Urls;
 
@@ -7,7 +8,7 @@ public class CodeGenerator : ICodeGenerator
     private readonly Random _random = new();
     private const string Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-    public Code Generate()
+    public Result<Code> Generate()
     {
         var maxValue = Alphabet.Length;
         var result = new StringBuilder(Code.Length);
@@ -18,6 +19,6 @@ public class CodeGenerator : ICodeGenerator
             result.Append(Alphabet[randomIndex]);
         }
 
-        return new Code(result.ToString());
+        return Code.Create(result.ToString());
     }
 }
