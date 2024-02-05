@@ -4,17 +4,18 @@ using Application.UseCases.Urls.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Urls.Contracts;
+using Presentation.Utils;
 
 namespace Presentation.Urls;
 
 [ApiController]
 [Route("[controller]")]
-public class UrlShortenerController : ControllerBase
+public class UrlShortenerController : BaseController
 {
     private readonly ISender _mediator;
     private readonly IConsoleLogger _logger;
     
-    public UrlShortenerController(IMediator mediator, IConsoleLogger logger)
+    public UrlShortenerController(ISender mediator, IConsoleLogger logger, IUnitOfWork unitOfWork) : base(unitOfWork)
     {
         _mediator = mediator;
         _logger = logger;
@@ -30,15 +31,16 @@ public class UrlShortenerController : ControllerBase
         if (response.IsFailure)
         {
             _logger.LogError($"error UrlShortenerController.Get:{shortUrl}, error: {response.Error}");
-            return BadRequest(response.Error);
+            return Error(response.Error);
         }
 
         _logger.LogInformation($"success UrlShortenerController.Get:{shortUrl}: {response.Value.LongUrl}");
-        return Ok(new ShortenUrlResponse
+        var dto = new ShortenUrlResponse
         {
             OriginalUrl = response.Value.LongUrl.AsString(),
             ShortenUrl = response.Value.ShortUrl.AsString()
-        });
+        };
+        return await Success(dto);
     }
     
     [HttpPost("[action]")]
@@ -48,19 +50,18 @@ public class UrlShortenerController : ControllerBase
         
         var command = new CreateUrl { Url = request.Url };
         var response = await _mediator.Send(command);
-        
         if (response.IsFailure)
         {
             _logger.LogError($" error UrlShortenerController.Create:{request.Url}, error: {response.Error}");
-            return BadRequest(response.Error);
+            return Error(response.Error);
         }
         
         _logger.LogInformation($"success UrlShortenerController.Create:{request.Url}, value: {response.Value.LongUrl}");
-        
-        return Ok(new ShortenUrlResponse
+        var dto = new ShortenUrlResponse
         {
             OriginalUrl = response.Value.LongUrl.AsString(),
             ShortenUrl = response.Value.ShortUrl.AsString()
-        });
+        };
+        return await Success(dto);
     }
 }

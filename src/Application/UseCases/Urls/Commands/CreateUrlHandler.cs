@@ -28,7 +28,6 @@ public class CreateUrlHandler : IRequestHandler<CreateUrl, Result<ShortenedUrl>>
         var shortUrl = urlOrError.Value;
         
         await _unitOfWork.ShortenedUrls.AddAsync(shortUrl);
-        await _unitOfWork.SaveChangesAsync();
         
         return Result.Success(shortUrl);
     }
