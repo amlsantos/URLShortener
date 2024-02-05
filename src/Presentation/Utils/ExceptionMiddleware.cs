@@ -1,7 +1,6 @@
 ﻿using System.Text.Json;
 using Application.Exceptions;
 using Application.Interfaces;
-using ApplicationException = Application.Exceptions.ApplicationException;
 
 namespace Presentation.Utils;
 
@@ -19,41 +18,19 @@ public class ExceptionMiddleware
         catch (Exception e)
         {
             consoleLogger.LogError(e, e.Message);
-            
             await HandleExceptionAsync(context, e);
         }
     }
 
     private static async Task HandleExceptionAsync(HttpContext httpContext, Exception exception)
     {
-        var statusCode = GetStatusCode(exception);
-        var response = new ErrorDetails
-        {
-            Title = GetTitle(exception),
-            StatusCode = statusCode,
-            Message = exception.Message,
-            Errors = GetErrors(exception)
-        };
+        var response = Envelope.Error(exception.Message, GetErrors(exception));
 
         httpContext.Response.ContentType = "application/json";
-        httpContext.Response.StatusCode = statusCode;
+        httpContext.Response.StatusCode = response.StatusCode;
 
         await httpContext.Response.WriteAsync(JsonSerializer.Serialize(response));
     }
-
-    private static int GetStatusCode(Exception exception) =>
-        exception switch
-        {
-            ValidationException => StatusCodes.Status422UnprocessableEntity,
-            _ => StatusCodes.Status500InternalServerError
-        };
-
-    private static string GetTitle(Exception exception) =>
-        exception switch
-        {
-            ApplicationException applicationException => applicationException.Title,
-            _ => "Server Error"
-        };
 
     private static IReadOnlyDictionary<string, string[]> GetErrors(Exception exception)
     {

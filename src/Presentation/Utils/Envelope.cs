@@ -5,22 +5,24 @@ public class Envelope<T>
     public T Result { get; }
     public int StatusCode { get; }
     public string ErrorMessage { get; }
+    public IReadOnlyDictionary<string, string[]> ValidationErrors { get; init; }
     public DateTime TimeGenerated { get; }
 
-    protected internal Envelope(T result, int code, string errorMessage)
+    protected internal Envelope(T result, int code, string errorMessage, IReadOnlyDictionary<string, string[]> validationErrors)
     {
         Result = result;
         StatusCode = code;
         ErrorMessage = errorMessage;
+        ValidationErrors = validationErrors;
         TimeGenerated = DateTime.UtcNow;
     }
 }
 
 public class Envelope : Envelope<string>
 {
-    private Envelope() : base(null, 200, string.Empty) { }
+    private Envelope() : base(null, 200, string.Empty, new Dictionary<string, string[]>()) { }
 
-    private Envelope(string errorMessage) : base(null, 400, errorMessage) { }
+    private Envelope(string errorMessage, IReadOnlyDictionary<string, string[]> validationErrors) : base(null, 400, errorMessage, validationErrors) { }
 
     public static Envelope Success()
     {
@@ -29,11 +31,11 @@ public class Envelope : Envelope<string>
     
     public static Envelope<T> Success<T>(T result)
     {
-        return new Envelope<T>(result, 200, string.Empty);
+        return new Envelope<T>(result, 200, string.Empty, new Dictionary<string, string[]>());
     }
 
-    public static Envelope Error(string errorMessage)
+    public static Envelope Error(string errorMessage, IReadOnlyDictionary<string, string[]> errors)
     {
-        return new Envelope(errorMessage);
+        return new Envelope(errorMessage, errors);
     }
 }
