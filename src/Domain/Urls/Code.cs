@@ -16,5 +16,6 @@ public class Code
         _value = value;
     }
 
+
     public string AsString() => _value;
 }

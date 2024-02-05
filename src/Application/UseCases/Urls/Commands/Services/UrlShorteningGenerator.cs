@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using CSharpFunctionalExtensions;
 using Domain.Urls;
 
 namespace Application.UseCases.Urls.Commands.Services;
@@ -14,18 +15,15 @@ public class UrlShorteningGenerator
         _generator = generator;
     }
 
-    public ShortenedUrl Generate(Url url)
+    public async Task<Result<ShortenedUrl>> GenerateAsync(Url url)
     {
         var code = _generator.Generate();
-        
-        var isPresent = _unitOfWork.ShortenedUrls.HasCode(code) || _unitOfWork.ShortenedUrls.HasUrl(url);
-        var isUnique = !isPresent;
 
-        if (!isUnique)
-            throw new InvalidOperationException($"The url {url.AsString()} is not unique. Please enter a different url");
+        var isUnique = !await _unitOfWork.ShortenedUrls.HasUrl(url);
+        if (!isUnique) 
+            return Result.Failure<ShortenedUrl>($"The url {url.AsString()} is not unique. Please enter a different url:{url.AsString()}");
 
         var shortUrl = new Url($"https://short:{80}/{code.AsString()}");
-
-        return new ShortenedUrl(url, shortUrl, code);
+        return Result.Success(new ShortenedUrl(url, shortUrl, code));
     }
 }

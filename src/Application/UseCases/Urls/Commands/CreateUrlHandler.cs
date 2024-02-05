@@ -1,11 +1,12 @@
 ﻿using Application.Interfaces;
 using Application.UseCases.Urls.Commands.Services;
+using CSharpFunctionalExtensions;
 using Domain.Urls;
 using MediatR;
 
 namespace Application.UseCases.Urls.Commands;
 
-public class CreateUrlHandler : IRequestHandler<CreateUrl, ShortenedUrl>
+public class CreateUrlHandler : IRequestHandler<CreateUrl, Result<ShortenedUrl>>
 {
     private readonly UrlShorteningGenerator _generator;
     private readonly IUnitOfWork _unitOfWork;
@@ -16,14 +17,19 @@ public class CreateUrlHandler : IRequestHandler<CreateUrl, ShortenedUrl>
         _unitOfWork = unitOfWork;
     }
 
-    public Task<ShortenedUrl> Handle(CreateUrl request, CancellationToken cancellationToken)
+    public async Task<Result<ShortenedUrl>> Handle(CreateUrl request, CancellationToken cancellationToken)
     {
         var url = new Url(request.Url);
-        var shortenedUrl = _generator.Generate(url);
         
-        _unitOfWork.ShortenedUrls.Add(shortenedUrl);
-        _unitOfWork.SaveChanges();
+        var urlOrError = await _generator.GenerateAsync(url);
+        if (urlOrError.IsFailure)
+            return Result.Failure<ShortenedUrl>(urlOrError.Error);
+
+        var shortUrl = urlOrError.Value;
         
-        return Task.FromResult(shortenedUrl);
+        await _unitOfWork.ShortenedUrls.AddAsync(shortUrl);
+        await _unitOfWork.SaveChangesAsync();
+        
+        return Result.Success(shortUrl);
     }
 }

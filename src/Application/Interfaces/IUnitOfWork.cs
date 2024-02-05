@@ -4,5 +4,5 @@ public interface IUnitOfWork
 {
     public IShortenedUrlRepository ShortenedUrls { get; }
 
-    int SaveChanges();
+    Task<int> SaveChangesAsync();
 }

@@ -16,7 +16,7 @@ public class CachedUrlRepository : IShortenedUrlRepository
         _memoryCache = memoryCache;
     }
 
-    public Maybe<ShortenedUrl> Get(Url url)
+    public async Task<Maybe<ShortenedUrl>> Get(Url url)
     {
         var key = url.AsString();
         
@@ -24,13 +24,13 @@ public class CachedUrlRepository : IShortenedUrlRepository
         if (isPresent)
             return existingUrl;
 
-        var shortenedUrl = _repository.Get(url);
+        var shortenedUrl = await _repository.Get(url);
         _memoryCache.Set(key, shortenedUrl);
 
         return shortenedUrl;
     }
 
-    public bool HasCode(Code code)
+    public async Task<bool> HasCode(Code code)
     {
         var key = code.AsString();
         
@@ -38,13 +38,13 @@ public class CachedUrlRepository : IShortenedUrlRepository
         if (isPresent)
             return result;
 
-        var hasCode = _repository.HasCode(code);
+        var hasCode = await _repository.HasCode(code);
         _memoryCache.Set(key, hasCode);
 
         return hasCode;
     }
 
-    public bool HasUrl(Url url)
+    public async Task<bool> HasUrl(Url url)
     {
         var key = url.AsString();
         
@@ -52,11 +52,11 @@ public class CachedUrlRepository : IShortenedUrlRepository
         if (isPresent)
             return result;
 
-        var hasUrl = _repository.HasUrl(url);
+        var hasUrl = await _repository.HasUrl(url);
         _memoryCache.Set(key, hasUrl);
 
         return hasUrl;
     }
 
-    public void Add(ShortenedUrl url) => _repository.Add(url);
+    public Task AddAsync(ShortenedUrl url) => _repository.AddAsync(url);
 }

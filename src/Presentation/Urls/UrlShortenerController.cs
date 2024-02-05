@@ -29,7 +29,7 @@ public class UrlShortenerController : ControllerBase
         var response = await _mediator.Send(query);
         if (response.IsFailure)
         {
-            _logger.LogError($"error UrlShortenerController.Get:{shortUrl}: {response.Error}");
+            _logger.LogError($"error UrlShortenerController.Get:{shortUrl}, error: {response.Error}");
             return BadRequest(response.Error);
         }
 
@@ -42,15 +42,25 @@ public class UrlShortenerController : ControllerBase
     }
     
     [HttpPost("[action]")]
-    public async Task<ShortenUrlResponse> Create(ShortenUrlRequest request)
+    public async Task<IActionResult> Create(ShortenUrlRequest request)
     {
+        _logger.LogInformation($"starting UrlShortenerController.Create:{request.Url}");
+        
         var command = new CreateUrl { Url = request.Url };
         var response = await _mediator.Send(command);
         
-        return new ShortenUrlResponse
+        if (response.IsFailure)
         {
-            OriginalUrl = response.LongUrl.AsString(),
-            ShortenUrl = response.ShortUrl.AsString()
-        };
+            _logger.LogError($" error UrlShortenerController.Create:{request.Url}, error: {response.Error}");
+            return BadRequest(response.Error);
+        }
+        
+        _logger.LogInformation($"success UrlShortenerController.Create:{request.Url}, value: {response.Value.LongUrl}");
+        
+        return Ok(new ShortenUrlResponse
+        {
+            OriginalUrl = response.Value.LongUrl.AsString(),
+            ShortenUrl = response.Value.ShortUrl.AsString()
+        });
     }
 }

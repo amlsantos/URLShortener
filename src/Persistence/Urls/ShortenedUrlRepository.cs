@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using CSharpFunctionalExtensions;
 using Domain.Urls;
+using Microsoft.EntityFrameworkCore;
 using Persistence.Database;
 
 namespace Persistence.Urls;
@@ -9,26 +10,26 @@ public class ShortenedUrlRepository : Repository<ShortenedUrl>, IShortenedUrlRep
 {
     public ShortenedUrlRepository(ApplicationDbContext context) : base(context) {}
     
-    public Maybe<ShortenedUrl> Get(Url url)
+    public async Task<Maybe<ShortenedUrl>> Get(Url url)
     {
-        var result = Context.
+        var result = await Context.
             ShortenedUrls.
-            FirstOrDefault(x => x.ShortUrl == url);
+            FirstOrDefaultAsync(x => x.ShortUrl == url);
         return Maybe.From<ShortenedUrl>(result);
     }
 
-    public bool HasCode(Code code)
+    public async Task<bool> HasCode(Code code)
     {
-        return Context.ShortenedUrls.Any(x => x.Code == code);
+        return await Context.ShortenedUrls.AnyAsync(x => x.Code == code);
     }
 
-    public bool HasUrl(Url url)
+    public async Task<bool> HasUrl(Url url)
     {
-        return Context.ShortenedUrls.Any(x => x.LongUrl == url);
+        return await Context.ShortenedUrls.AnyAsync(x => x.LongUrl == url);
     }
 
-    public void Add(ShortenedUrl url)
+    public async Task AddAsync(ShortenedUrl url)
     {
-        base.Add(url);
+        await Add(url);
     }
 }

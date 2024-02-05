@@ -14,5 +14,5 @@ public class UnitOfWork : IUnitOfWork
 
     public IShortenedUrlRepository ShortenedUrls { get; }
     
-    public int SaveChanges() => _dbContext.SaveChanges();
+    public async Task<int> SaveChangesAsync() => await _dbContext.SaveChangesAsync();
 }
