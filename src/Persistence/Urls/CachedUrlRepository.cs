@@ -20,7 +20,6 @@ public class CachedUrlRepository : IShortenedUrlRepository
     {
         var key = url.AsString();
         
-        // TODO: fix bug
         var isPresent = _memoryCache.TryGetValue(key, out Maybe<ShortenedUrl> existingUrl);
         if (isPresent)
             return existingUrl;

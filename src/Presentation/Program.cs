@@ -17,7 +17,7 @@ public static class Program
 
         var app = builder.Build();
         ConfigureApp(app);
-        // RunMigrations(app);
+        RunMigrations(app);
         
         app.Run();
     }

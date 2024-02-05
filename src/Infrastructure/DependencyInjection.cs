@@ -21,8 +21,8 @@ public static class DependencyInjection
         services.Configure<WatchdogOptions>(manager.GetSection(WatchdogOptions.Watchdog));
         services.AddWatchDogServices(options =>
         {
-            options.SetExternalDbConnString = manager.GetConnectionString(WatchdogOptions.DefaultConnection);
-            options.DbDriverOption = WatchDogDbDriverEnum.MSSQL;
+            // options.SetExternalDbConnString = manager.GetConnectionString(WatchdogOptions.DefaultConnection);
+            // options.DbDriverOption = WatchDogDbDriverEnum.MSSQL;
         });
         
         return services;
