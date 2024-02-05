@@ -17,7 +17,7 @@ public static class Program
 
         var app = builder.Build();
         ConfigureApp(app);
-        RunMigrations(app);
+        // RunMigrations(app);
         
         app.Run();
     }
@@ -38,7 +38,7 @@ public static class Program
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
-
+        
         services.AddApplication()
             .AddInfrastructure(configuration)
             .AddPersistence(configuration)

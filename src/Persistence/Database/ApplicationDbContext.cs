@@ -8,8 +8,8 @@ namespace Persistence.Database;
 public class ApplicationDbContext : DbContext
 {
     private readonly ConnectionStringsOptions _options;
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> contextOptions, IOptions<ConnectionStringsOptions> options) 
-        : base(contextOptions) => _options = options.Value;
+    
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> contextOptions, IOptions<ConnectionStringsOptions> options) : base(contextOptions) => _options = options.Value;
 
     public DbSet<ShortenedUrl> ShortenedUrls { set; get; }
 
@@ -21,6 +21,8 @@ public class ApplicationDbContext : DbContext
         optionsBuilder.UseSqlServer(_options.DefaultConnection);
     }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder) => 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+    }
 }
