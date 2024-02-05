@@ -2,7 +2,7 @@
 
 namespace Domain.Urls;
 
-public class Url : Common.ValueObject<Url>
+public sealed class Url : ValueObject<Url>
 {
     private readonly string _value;
 

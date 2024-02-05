@@ -2,7 +2,7 @@
 
 namespace Domain.Urls;
 
-public class Code : Common.ValueObject<Code>
+public sealed class Code : ValueObject<Code>
 {
     public const int Length = 7;
     private readonly string _value;

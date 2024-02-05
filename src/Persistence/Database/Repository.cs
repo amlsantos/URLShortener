@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Domain.Common;
 using Entity = Domain.Common.Entity;
 
 namespace Persistence.Database;

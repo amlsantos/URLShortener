@@ -1,4 +1,5 @@
 using System.Reflection;
+using Domain.Common;
 using FluentAssertions;
 using NetArchTest.Rules;
 using Xunit;
@@ -69,6 +70,28 @@ public class DomainLayerTests
         var result = Types.InAssembly(domain)
             .Should()
             .NotHaveDependencyOn(presentation.GetName().Name)
+            .GetResult();
+        
+        // assert
+        result.IsSuccessful.Should().BeTrue();
+    }
+
+    [Fact]
+    public void ValueObjects_ShouldBe_AbstractAndPublicAndSealed()
+    {
+        // arrange
+        var domain = Assembly.GetAssembly(typeof(Domain.DependencyInjection));
+
+        // act
+        var result = Types.InAssembly(domain)
+            .That()
+            .Inherit(typeof(ValueObject<>))
+            .Should()
+            .BeAbstract()
+            .And()
+            .BePublic()
+            .And()
+            .BeSealed()
             .GetResult();
         
         // assert
