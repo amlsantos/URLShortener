@@ -5,10 +5,10 @@ using ValidationException = Application.Exceptions.ValidationException;
 
 namespace Application.Behaviours;
 
-public sealed class ValidatorBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : class, IRequest<TResponse>
+public sealed class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : class, IRequest<TResponse>
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
-    public ValidatorBehavior(IEnumerable<IValidator<TRequest>> validators) => _validators = validators;
+    public ValidationBehaviour(IEnumerable<IValidator<TRequest>> validators) => _validators = validators;
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {

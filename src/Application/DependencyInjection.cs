@@ -17,7 +17,7 @@ public static class DependencyInjection
         services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(assembly));
         services.AddValidatorsFromAssembly(assembly);
         
-        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
         services.AddScoped<CodeGenerator>();
         services.AddScoped<IUrlShorteningGenerator, UrlShorteningGenerator>();

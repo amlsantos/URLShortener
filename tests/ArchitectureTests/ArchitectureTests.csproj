@@ -7,11 +7,13 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+    <RootNamespace>UnitTests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
+    <PackageReference Include="FluentAssertions" Version="7.0.0-alpha.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
+    <PackageReference Include="NetArchTest.Rules" Version="1.3.2" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -24,9 +26,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
-      <HintPath>..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\8.0.1\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\..\src\Application\Application.csproj" />
+    <ProjectReference Include="..\..\src\Domain\Domain.csproj" />
+    <ProjectReference Include="..\..\src\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Persistence\Persistence.csproj" />
+    <ProjectReference Include="..\..\src\Presentation\Presentation.csproj" />
   </ItemGroup>
 
 </Project>

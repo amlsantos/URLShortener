@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "src\Applicat
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6AE5A437-AC23-40F6-AE51-D91CAC376BA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "tests\UnitTests\UnitTests.csproj", "{A4C4996D-9148-40E5-8695-2403A07F6C34}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchitectureTests", "tests\ArchitectureTests\ArchitectureTests.csproj", "{A4C4996D-9148-40E5-8695-2403A07F6C34}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "src\Infrastructure\Infrastructure.csproj", "{AF6EB79E-7B41-4742-8E7C-32EDAE466E7D}"
 EndProject
