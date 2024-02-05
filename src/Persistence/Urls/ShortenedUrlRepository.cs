@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using CSharpFunctionalExtensions;
 using Domain.Urls;
 using Persistence.Database;
 
@@ -8,9 +9,12 @@ public class ShortenedUrlRepository : Repository<ShortenedUrl>, IShortenedUrlRep
 {
     public ShortenedUrlRepository(ApplicationDbContext context) : base(context) {}
     
-    public ShortenedUrl? Get(Url url)
+    public Maybe<ShortenedUrl> Get(Url url)
     {
-        return Context.ShortenedUrls.SingleOrDefault(x => x.ShortUrl == url);
+        var result = Context.
+            ShortenedUrls.
+            FirstOrDefault(x => x.ShortUrl == url);
+        return Maybe.From<ShortenedUrl>(result);
     }
 
     public bool HasCode(Code code)

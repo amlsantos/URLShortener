@@ -21,18 +21,24 @@ public class UrlShortenerController : ControllerBase
     }
 
     [HttpGet("[action]")]
-    public async Task<ShortenUrlResponse> Get(string shortUrl)
+    public async Task<IActionResult> Get(string shortUrl)
     {
-        _logger.LogInformation($"");
+        _logger.LogInformation($"starting UrlShortenerController.Get:{shortUrl}");
         
         var query = new GetUrl { ShortUrl = shortUrl };
         var response = await _mediator.Send(query);
-        
-        return new ShortenUrlResponse
+        if (response.IsFailure)
         {
-            OriginalUrl = response.LongUrl.AsString(),
-            ShortenUrl = response.ShortUrl.AsString()
-        };
+            _logger.LogError($"error UrlShortenerController.Get:{shortUrl}: {response.Error}");
+            return BadRequest(response.Error);
+        }
+
+        _logger.LogInformation($"success UrlShortenerController.Get:{shortUrl}: {response.Value.LongUrl}");
+        return Ok(new ShortenUrlResponse
+        {
+            OriginalUrl = response.Value.LongUrl.AsString(),
+            ShortenUrl = response.Value.ShortUrl.AsString()
+        });
     }
     
     [HttpPost("[action]")]

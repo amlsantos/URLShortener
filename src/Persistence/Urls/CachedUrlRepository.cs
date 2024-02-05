@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using CSharpFunctionalExtensions;
 using Domain.Urls;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -15,7 +16,7 @@ public class CachedUrlRepository : IShortenedUrlRepository
         _memoryCache = memoryCache;
     }
 
-    public ShortenedUrl? Get(Url url)
+    public Maybe<ShortenedUrl> Get(Url url)
     {
         var key = url.AsString();
         
