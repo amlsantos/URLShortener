@@ -13,6 +13,10 @@ public sealed class Url : ValueObject<Url>
         if (string.IsNullOrEmpty(value))
             return Result.Failure<Url>($"Url can not be empty");
 
+        var isValid = Uri.TryCreate(value, UriKind.Absolute, out _);
+        if (!isValid)
+            return Result.Failure<Url>($"Please enter a valid url");
+
         return Result.Success(new Url(value));
     }
 
