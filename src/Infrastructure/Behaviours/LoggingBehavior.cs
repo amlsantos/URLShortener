@@ -26,14 +26,14 @@ public sealed class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRe
             _logger.LogInformation($"[START] {requestNameWithGuid} {JsonSerializer.Serialize(request)}");
             response = await next();
         }
-        catch (NotSupportedException)
+        catch (Exception ex)
         {
-            _logger.LogWarning($"[Serialization ERROR] {requestNameWithGuid} Could not serialize the request.");
+            _logger.LogWarning($"[ERROR] {requestNameWithGuid} Error while executing a handler. Error: {ex.Message}");
         }
         finally
         {
-            if (IsResult(response)) 
-                ShowResponse(response, stopwatch, requestNameWithGuid);
+            if (HasResult(response)) 
+                ShowResult(response, stopwatch, requestNameWithGuid);
             
             stopwatch.Stop();
         }
@@ -41,12 +41,12 @@ public sealed class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRe
         return response;
     }
 
-    private bool IsResult(TResponse? response)
+    private bool HasResult(TResponse? response)
     {
         return response?.GetType().Name.Contains(nameof(Result)) ?? false;
     }
 
-    private void ShowResponse(TResponse? response, Stopwatch stopwatch, string requestNameWithGuid)
+    private void ShowResult(TResponse? response, Stopwatch stopwatch, string requestNameWithGuid)
     {
         var result = response ?? Result.Failure<object>("error while converting response to Result object");
 
