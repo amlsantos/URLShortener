@@ -2,8 +2,9 @@
 
 namespace Domain.Urls;
 
-public sealed class ShortenedUrl : Entity
+public sealed class ShortenedUrl : Entity<Guid>
 {
+    public override Guid Id { get; protected set; }
     public Url LongUrl { get; init; }
     public Url ShortUrl { get; init; }
     public Code Code { get; init; }

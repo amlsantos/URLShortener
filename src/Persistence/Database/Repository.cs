@@ -2,7 +2,7 @@
 
 namespace Persistence.Database;
 
-public abstract class Repository<T> where T : Entity
+public abstract class Repository<T> where T : Entity<Guid>
 {
     protected readonly ApplicationDbContext Context;
     protected Repository(ApplicationDbContext context) => Context = context;
