@@ -19,7 +19,7 @@ public sealed class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRe
         var requestNameWithGuid = $"{requestName} [{requestGuid}]";
         var stopwatch = Stopwatch.StartNew();
         
-        TResponse response = default;
+        TResponse response = default!;
 
         try
         {
@@ -32,24 +32,30 @@ public sealed class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRe
         }
         finally
         {
-            if (IsResult(response))
-            {
-                var result = (Result<object>)response;
-                
-                if (result.IsSuccess)
-                    ShowSuccessResponse(result, stopwatch, requestNameWithGuid);
-                else if (result.IsFailure)
-                    ShowErrorResponse(result, stopwatch, requestNameWithGuid);
-            }
+            if (IsResult(response)) 
+                ShowResponse(response, stopwatch, requestNameWithGuid);
             
             stopwatch.Stop();
         }
 
         return response;
     }
-    
-    private bool IsResult(TResponse? response) => response.GetType().Name.Contains(typeof(Result).Name);
-    
+
+    private bool IsResult(TResponse? response)
+    {
+        return response?.GetType().Name.Contains(nameof(Result)) ?? false;
+    }
+
+    private void ShowResponse(TResponse? response, Stopwatch stopwatch, string requestNameWithGuid)
+    {
+        var result = response ?? Result.Failure<object>("error while converting response to Result object");
+
+        if (result.IsSuccess)
+            ShowSuccessResponse(result, stopwatch, requestNameWithGuid);
+        else if (result.IsFailure)
+            ShowErrorResponse(result, stopwatch, requestNameWithGuid);
+    }
+
     private void ShowSuccessResponse(Result<object> result, Stopwatch stopwatch, string requestNameWithGuid)
     {
         _logger.LogInformation($"[RESPONSE] [SUCCESS] {requestNameWithGuid}; Result={result.Value};");
