@@ -17,10 +17,9 @@ public sealed class UrlShorteningGenerator : IUrlShorteningGenerator
 
     public async Task<Result<ShortenedUrl>> GenerateAsync(Url url)
     {
-        var isUnique = !await _unitOfWork.ShortenedUrls.HasUrlAsync(url);
-        if (!isUnique)
-            return Result.Failure<ShortenedUrl>(
-                $"The url {url.Value()} is not unique. Please enter a different url:{url.Value()}");
+        var isPresent = await _unitOfWork.ShortUrls.HasUrlAsync(url);
+        if (isPresent)
+            return Result.Failure<ShortenedUrl>($"The url {url.Value()} is not unique. Please enter a different url:{url.Value()}");
 
         var codeOrError = _generator.Generate();
         if (codeOrError.IsFailure)
