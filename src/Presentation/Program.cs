@@ -4,7 +4,7 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Persistence.Database;
-using Presentation.Utils;
+using Presentation.Middlewares;
 
 namespace Presentation;
 
@@ -54,9 +54,9 @@ public static class Program
         }
 
         app.UseMiddleware<ExceptionMiddleware>();
-        
         app.UseInfrastructure();
         app.UseHttpsRedirection();
+        
         app.MapControllers();
     }
 

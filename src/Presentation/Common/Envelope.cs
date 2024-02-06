@@ -1,4 +1,4 @@
-﻿namespace Presentation.Utils;
+﻿namespace Presentation.Common;
 
 public class Envelope<T>
 {

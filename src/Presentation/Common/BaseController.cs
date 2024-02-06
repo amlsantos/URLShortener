@@ -1,7 +1,7 @@
 ﻿using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Presentation.Utils;
+namespace Presentation.Common;
 
 public abstract class BaseController : ControllerBase
 {

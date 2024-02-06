@@ -1,8 +1,9 @@
 ﻿using System.Text.Json;
 using Application.Exceptions;
 using Application.Interfaces;
+using Presentation.Common;
 
-namespace Presentation.Utils;
+namespace Presentation.Middlewares;
 
 public class ExceptionMiddleware
 {

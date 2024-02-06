@@ -3,8 +3,8 @@ using Application.UseCases.Urls.Commands;
 using Application.UseCases.Urls.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Common;
 using Presentation.Urls.Contracts;
-using Presentation.Utils;
 
 namespace Presentation.Urls;
 
