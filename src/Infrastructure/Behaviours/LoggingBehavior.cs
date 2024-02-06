@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Infrastructure.Behaviours;
 
-public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : class, IRequest<TResponse>
+public sealed class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : class, IRequest<TResponse>
 {
     private readonly IConsoleLogger _logger;
     
@@ -35,6 +35,7 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
             if (IsResult(response))
             {
                 var result = (Result<object>)response;
+                
                 if (result.IsSuccess)
                     ShowSuccessResponse(result, stopwatch, requestNameWithGuid);
                 else if (result.IsFailure)
@@ -47,7 +48,7 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
         return response;
     }
     
-    private static bool IsResult(TResponse? response) => response.GetType().Name.Contains(typeof(Result).Name);
+    private bool IsResult(TResponse? response) => response.GetType().Name.Contains(typeof(Result).Name);
     
     private void ShowSuccessResponse(Result<object> result, Stopwatch stopwatch, string requestNameWithGuid)
     {

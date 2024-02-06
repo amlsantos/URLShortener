@@ -22,6 +22,6 @@ public abstract class BaseController : ControllerBase
 
     protected IActionResult Error(string errorMessage)
     {
-        return BadRequest(Envelope.Error(errorMessage, new Dictionary<string, string[]>()));
+        return BadRequest(Envelope.Error(errorMessage));
     }
 }

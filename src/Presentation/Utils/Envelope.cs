@@ -34,6 +34,11 @@ public class Envelope : Envelope<string>
         return new Envelope<T>(result, 200, string.Empty, new Dictionary<string, string[]>());
     }
 
+    public static Envelope Error(string errorMessage)
+    {
+        return Error(errorMessage, new Dictionary<string, string[]>());
+    }
+    
     public static Envelope Error(string errorMessage, IReadOnlyDictionary<string, string[]> errors)
     {
         return new Envelope(errorMessage, errors);

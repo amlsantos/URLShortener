@@ -4,7 +4,7 @@ using MediatR;
 using NetArchTest.Rules;
 using Xunit;
 
-namespace UnitTests;
+namespace ArchitectureTests;
 
 public class ApplicationLayerTests
 {
@@ -62,6 +62,24 @@ public class ApplicationLayerTests
     }
     
     [Fact]
+    public void Behaviours_ShouldBe_Sealed()
+    {
+        // arrange
+        var application = Assembly.GetAssembly(typeof(Application.DependencyInjection));
+        
+        // act
+        var result = Types.InAssembly(application)
+            .That()
+            .ImplementInterface(typeof(IPipelineBehavior<,>))
+            .Should()
+            .BeSealed()
+            .GetResult();
+        
+        // assert
+        result.IsSuccessful.Should().BeTrue();
+    }
+    
+    [Fact]
     public void Handlers_ShouldHaveNamingEndingWith_Handler()
     {
         // arrange
@@ -74,6 +92,27 @@ public class ApplicationLayerTests
             .ImplementInterface(typeof(IRequestHandler<,>))
             .Should()
             .HaveNameMatching(expectedName)
+            .GetResult();
+        
+        // assert
+        result.IsSuccessful.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Services_ShouldBe_Sealed()
+    {
+        // arrange
+        var application = Assembly.GetAssembly(typeof(Application.DependencyInjection));
+        const string servicesNamespace = "Services";
+
+        // act
+        var result = Types.InAssembly(application)
+            .That()
+            .AreClasses()
+            .And()
+            .ResideInNamespace(servicesNamespace)
+            .Should()
+            .BeSealed()
             .GetResult();
         
         // assert

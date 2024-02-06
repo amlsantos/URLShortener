@@ -15,12 +15,12 @@ public sealed class Code : ValueObject<Code>
             return Result.Failure<Code>($"Code can not be empty");
 
         if (value.Length > Length)
-            return Result.Failure<Code>($"Code with invalid lenght");
+            return Result.Failure<Code>($"Code with invalid length");
 
         return Result.Success(new Code(value));
     }
 
-    public string AsString() => _value;
+    public string Value() => _value;
 
     protected override bool EqualsCore(Code other)
     {
@@ -34,7 +34,7 @@ public sealed class Code : ValueObject<Code>
 
     public static implicit operator string(Code code)
     {
-        return code.AsString();
+        return code.Value();
     }
 
     public static Code Of(string value)

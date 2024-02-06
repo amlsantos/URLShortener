@@ -37,8 +37,8 @@ public class UrlShortenerController : BaseController
         _logger.LogInformation($"success UrlShortenerController.Get:{shortUrl}: {response.Value.LongUrl}");
         var dto = new ShortenUrlResponse
         {
-            OriginalUrl = response.Value.LongUrl.AsString(),
-            ShortenUrl = response.Value.ShortUrl.AsString()
+            OriginalUrl = response.Value.LongUrl,
+            ShortenUrl = response.Value.ShortUrl
         };
         return await Success(dto);
     }
@@ -59,8 +59,8 @@ public class UrlShortenerController : BaseController
         _logger.LogInformation($"success UrlShortenerController.Create:{request.Url}, value: {response.Value.LongUrl}");
         var dto = new ShortenUrlResponse
         {
-            OriginalUrl = response.Value.LongUrl.AsString(),
-            ShortenUrl = response.Value.ShortUrl.AsString()
+            OriginalUrl = response.Value.LongUrl,
+            ShortenUrl = response.Value.ShortUrl
         };
         return await Success(dto);
     }

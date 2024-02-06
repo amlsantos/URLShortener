@@ -2,7 +2,7 @@
 
 namespace Domain.Urls;
 
-public class ShortenedUrl : Entity
+public sealed class ShortenedUrl : Entity
 {
     public Url LongUrl { get; init; }
     public Url ShortUrl { get; init; }

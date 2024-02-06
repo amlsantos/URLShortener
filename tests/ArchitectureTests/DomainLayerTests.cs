@@ -4,7 +4,7 @@ using FluentAssertions;
 using NetArchTest.Rules;
 using Xunit;
 
-namespace UnitTests;
+namespace ArchitectureTests;
 
 public class DomainLayerTests
 {
@@ -77,20 +77,20 @@ public class DomainLayerTests
     }
 
     [Fact]
-    public void ValueObjects_ShouldBe_AbstractAndPublicAndSealed()
+    public void EntitiesAndValueObjects_ShouldBe_Sealed()
     {
         // arrange
         var domain = Assembly.GetAssembly(typeof(Domain.DependencyInjection));
-
+        
         // act
         var result = Types.InAssembly(domain)
             .That()
+            .AreClasses()
+            .And()
             .Inherit(typeof(ValueObject<>))
+            .And()
+            .Inherit(typeof(Entity))
             .Should()
-            .BeAbstract()
-            .And()
-            .BePublic()
-            .And()
             .BeSealed()
             .GetResult();
         

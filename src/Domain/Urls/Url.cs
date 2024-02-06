@@ -16,7 +16,8 @@ public sealed class Url : ValueObject<Url>
         return Result.Success(new Url(value));
     }
 
-    public string AsString() => _value;
+    public string Value() => _value;
+    
     protected override bool EqualsCore(Url other)
     {
         return _value == other._value;
@@ -29,7 +30,7 @@ public sealed class Url : ValueObject<Url>
     
     public static implicit operator string(Url url)
     {
-        return url.AsString();
+        return url.Value();
     }
 
     public static Url Of(string value)

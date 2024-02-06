@@ -10,7 +10,7 @@ public class ShortenedUrlRepository : Repository<ShortenedUrl>, IShortenedUrlRep
 {
     public ShortenedUrlRepository(ApplicationDbContext context) : base(context) {}
     
-    public async Task<Maybe<ShortenedUrl>> Get(Url url)
+    public async Task<Maybe<ShortenedUrl>> GetAsync(Url url)
     {
         var result = await Context.
             ShortenedUrls.
@@ -18,12 +18,12 @@ public class ShortenedUrlRepository : Repository<ShortenedUrl>, IShortenedUrlRep
         return Maybe.From<ShortenedUrl>(result);
     }
 
-    public async Task<bool> HasCode(Code code)
+    public async Task<bool> HasCodeAsync(Code code)
     {
         return await Context.ShortenedUrls.AnyAsync(x => x.Code == code);
     }
 
-    public async Task<bool> HasUrl(Url url)
+    public async Task<bool> HasUrlAsync(Url url)
     {
         return await Context.ShortenedUrls.AnyAsync(x => x.LongUrl == url);
     }

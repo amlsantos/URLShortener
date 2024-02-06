@@ -22,7 +22,7 @@ public class ExceptionMiddleware
         }
     }
 
-    private static async Task HandleExceptionAsync(HttpContext httpContext, Exception exception)
+    private async Task HandleExceptionAsync(HttpContext httpContext, Exception exception)
     {
         var response = Envelope.Error(exception.Message, GetErrors(exception));
 
@@ -32,7 +32,7 @@ public class ExceptionMiddleware
         await httpContext.Response.WriteAsync(JsonSerializer.Serialize(response));
     }
 
-    private static IReadOnlyDictionary<string, string[]> GetErrors(Exception exception)
+    private IReadOnlyDictionary<string, string[]> GetErrors(Exception exception)
     {
         if (exception is ValidationException validationException)
             return validationException.ErrorsDictionary;

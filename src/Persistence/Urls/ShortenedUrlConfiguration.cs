@@ -15,15 +15,15 @@ public class ShortenedUrlConfiguration : IEntityTypeConfiguration<ShortenedUrl>
 
         var longUrl = entity.Property(x => x.LongUrl);
         longUrl.IsRequired();
-        longUrl.HasConversion(x => x.AsString(), u => Url.Of(u));
+        longUrl.HasConversion(x => x.Value(), u => Url.Of(u));
         
         var shortUrl = entity.Property(x => x.ShortUrl);
         shortUrl.IsRequired();
-        shortUrl.HasConversion(x => x.AsString(), u => Url.Of(u));
+        shortUrl.HasConversion(x => x.Value(), u => Url.Of(u));
 
         var code = entity.Property(x => x.Code);
         code.IsRequired();
-        code.HasConversion(c => c.AsString(), v => Code.Of(v));
+        code.HasConversion(c => c.Value(), v => Code.Of(v));
 
         var date = entity.Property(x => x.CreatedOn);
         date.IsRequired();

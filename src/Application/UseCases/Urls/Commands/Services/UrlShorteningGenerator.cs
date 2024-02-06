@@ -4,7 +4,7 @@ using Domain.Urls;
 
 namespace Application.UseCases.Urls.Commands.Services;
 
-public class UrlShorteningGenerator : IUrlShorteningGenerator
+public sealed class UrlShorteningGenerator : IUrlShorteningGenerator
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICodeGenerator _generator;
@@ -17,10 +17,10 @@ public class UrlShorteningGenerator : IUrlShorteningGenerator
 
     public async Task<Result<ShortenedUrl>> GenerateAsync(Url url)
     {
-        var isUnique = !await _unitOfWork.ShortenedUrls.HasUrl(url);
+        var isUnique = !await _unitOfWork.ShortenedUrls.HasUrlAsync(url);
         if (!isUnique)
             return Result.Failure<ShortenedUrl>(
-                $"The url {url.AsString()} is not unique. Please enter a different url:{url.AsString()}");
+                $"The url {url.Value()} is not unique. Please enter a different url:{url.Value()}");
 
         var codeOrError = _generator.Generate();
         if (codeOrError.IsFailure)
@@ -28,7 +28,7 @@ public class UrlShorteningGenerator : IUrlShorteningGenerator
         
         var code = codeOrError.Value;
         
-        var shortUrlOrError = Url.Create($"https://short:{80}/{code.AsString()}");
+        var shortUrlOrError = Url.Create($"https://short:{80}/{code.Value()}");
         if (shortUrlOrError.IsFailure)
             return Result.Failure<ShortenedUrl>(shortUrlOrError.Error);
         

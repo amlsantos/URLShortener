@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WatchDog;
-using WatchDog.src.Enums;
 
 namespace Infrastructure;
 
@@ -19,11 +18,7 @@ public static class DependencyInjection
         services.Decorate<IConsoleLogger, WatchDogLogger>();
         
         services.Configure<WatchdogOptions>(manager.GetSection(WatchdogOptions.Watchdog));
-        services.AddWatchDogServices(options =>
-        {
-            // options.SetExternalDbConnString = manager.GetConnectionString(WatchdogOptions.DefaultConnection);
-            // options.DbDriverOption = WatchDogDbDriverEnum.MSSQL;
-        });
+        services.AddWatchDogServices();
         
         return services;
     }

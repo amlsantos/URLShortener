@@ -17,7 +17,7 @@ public class GetUrlHandler : IRequestHandler<GetUrl, Result<ShortenedUrl>>
             return Result.Failure<ShortenedUrl>(urlOrError.Error);
 
         var url = urlOrError.Value;
-        var urlOrNothing = await _unitOfWork.ShortenedUrls.Get(url);
+        var urlOrNothing = await _unitOfWork.ShortenedUrls.GetAsync(url);
         
         if (urlOrNothing.HasNoValue)
             return Result.Failure<ShortenedUrl>($"There is no url in the database: {request.ShortUrl}");
