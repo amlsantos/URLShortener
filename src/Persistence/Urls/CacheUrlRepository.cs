@@ -8,15 +8,15 @@ namespace Persistence.Urls;
 
 public class CacheUrlRepository : IShortenedUrlRepository
 {
-    private readonly IShortenedUrlRepository _repository;
     private readonly IMemoryCache _memoryCache;
     private readonly MemoryCacheEntryOptions _options;
+    private readonly IShortenedUrlRepository _repository;
 
-    public CacheUrlRepository(IShortenedUrlRepository repository, IMemoryCache memoryCache, IOptions<CacheEntryOptions> options)
+    public CacheUrlRepository(IMemoryCache memoryCache, IOptions<CacheEntryOptions> options, IShortenedUrlRepository repository)
     {
-        _repository = repository;
         _memoryCache = memoryCache;
         _options = ToMemoryOptions(options.Value);
+        _repository = repository;
     }
 
     private MemoryCacheEntryOptions ToMemoryOptions(CacheEntryOptions options)
