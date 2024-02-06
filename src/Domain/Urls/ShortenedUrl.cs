@@ -1,4 +1,4 @@
-﻿using Domain.Common;
+﻿using CSharpFunctionalExtensions;
 
 namespace Domain.Urls;
 

@@ -1,5 +1,5 @@
 using System.Reflection;
-using Domain.Common;
+using CSharpFunctionalExtensions;
 using FluentAssertions;
 using NetArchTest.Rules;
 using Xunit;
