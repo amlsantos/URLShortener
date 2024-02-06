@@ -15,23 +15,8 @@ public class CacheUrlRepository : IShortenedUrlRepository
     public CacheUrlRepository(IMemoryCache memoryCache, IOptions<CacheEntryOptions> options, IShortenedUrlRepository repository)
     {
         _memoryCache = memoryCache;
-        _options = ToMemoryOptions(options.Value);
+        _options = options.Value.ToMemoryOptions();
         _repository = repository;
-    }
-
-    private MemoryCacheEntryOptions ToMemoryOptions(CacheEntryOptions options)
-    {
-        var slidingExpiration = options.SlidingExpiration;
-        var absoluteExpiration = options.AbsoluteExpiration;
-        
-        var isValidPriority = Enum.TryParse(options.CacheItemPriority, out CacheItemPriority priority);
-        if (!isValidPriority)
-            priority = CacheItemPriority.Normal;
-
-        return new MemoryCacheEntryOptions()
-            .SetSlidingExpiration(TimeSpan.FromSeconds(slidingExpiration))
-            .SetAbsoluteExpiration(TimeSpan.FromSeconds(absoluteExpiration))
-            .SetPriority(priority);
     }
 
     public async Task<Maybe<ShortenedUrl>> GetAsync(Url url)
@@ -71,7 +56,7 @@ public class CacheUrlRepository : IShortenedUrlRepository
             return result;
 
         var hasUrl = await _repository.HasUrlAsync(url);
-        _memoryCache.Set(key, hasUrl, _options);
+        // _memoryCache.Set(key, hasUrl, _options);
 
         return hasUrl;
     }
