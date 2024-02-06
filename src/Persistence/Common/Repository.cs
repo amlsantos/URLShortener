@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace Persistence.Database;
+namespace Persistence.Common;
 
 public abstract class Repository<T> where T : Entity<Guid>
 {

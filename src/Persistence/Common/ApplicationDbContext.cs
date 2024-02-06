@@ -3,7 +3,7 @@ using Domain.Urls;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace Persistence.Database;
+namespace Persistence.Common;
 
 public class ApplicationDbContext : DbContext
 {

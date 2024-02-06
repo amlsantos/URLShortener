@@ -3,7 +3,7 @@ using Domain;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
-using Persistence.Database;
+using Persistence.Common;
 using Presentation.Middlewares;
 
 namespace Presentation;

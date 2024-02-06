@@ -2,7 +2,7 @@
 using CSharpFunctionalExtensions;
 using Domain.Urls;
 using Microsoft.EntityFrameworkCore;
-using Persistence.Database;
+using Persistence.Common;
 
 namespace Persistence.Urls;
 

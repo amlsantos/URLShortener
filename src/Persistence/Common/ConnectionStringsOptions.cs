@@ -1,4 +1,4 @@
-﻿namespace Persistence.Database;
+﻿namespace Persistence.Common;
 
 public class ConnectionStringsOptions
 {
