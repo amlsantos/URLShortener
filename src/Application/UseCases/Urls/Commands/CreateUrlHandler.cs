@@ -24,12 +24,12 @@ public class CreateUrlHandler : IRequestHandler<CreateUrl, Result<ShortenedUrl>>
 
         var url = urlOrError.Value;
         var shortUrlOrError = await _generator.GenerateAsync(url);
-        
         if (shortUrlOrError.IsFailure)
             return Result.Failure<ShortenedUrl>(shortUrlOrError.Error);
 
         var shortUrl = shortUrlOrError.Value;
-        await _unitOfWork.ShortenedUrls.AddAsync(shortUrl);
+        
+        await _unitOfWork.ShortUrls.AddAsync(shortUrl);
         
         return Result.Success(shortUrl);
     }
