@@ -9,10 +9,10 @@ public class UnitOfWork : IUnitOfWork
     public UnitOfWork(ApplicationDbContext dbContext, IShortenedUrlRepository shortenedUrls)
     {
         _dbContext = dbContext;
-        ShortenedUrls = shortenedUrls;
+        ShortUrls = shortenedUrls;
     }
 
-    public IShortenedUrlRepository ShortenedUrls { get; }
+    public IShortenedUrlRepository ShortUrls { get; }
     
     public async Task<int> SaveChangesAsync() => await _dbContext.SaveChangesAsync();
 }

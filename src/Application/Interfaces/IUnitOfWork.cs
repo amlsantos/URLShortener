@@ -2,7 +2,7 @@
 
 public interface IUnitOfWork
 {
-    public IShortenedUrlRepository ShortenedUrls { get; }
+    public IShortenedUrlRepository ShortUrls { get; }
 
     Task<int> SaveChangesAsync();
 }
