@@ -30,6 +30,6 @@ public class ShortenedUrlRepository : Repository<ShortenedUrl>, IShortenedUrlRep
 
     public async Task AddAsync(ShortenedUrl url)
     {
-        await Add(url);
+        await base.AddAsync(url);
     }
 }
