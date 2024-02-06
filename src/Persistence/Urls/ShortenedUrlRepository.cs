@@ -8,7 +8,7 @@ namespace Persistence.Urls;
 
 public class ShortenedUrlRepository : Repository<ShortenedUrl>, IShortenedUrlRepository
 {
-    public ShortenedUrlRepository(ApplicationDbContext context) : base(context) {}
+    public ShortenedUrlRepository(ApplicationDbContext context) : base(context) { }
     
     public async Task<Maybe<ShortenedUrl>> GetAsync(Url url)
     {
