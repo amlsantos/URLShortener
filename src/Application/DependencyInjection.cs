@@ -19,7 +19,7 @@ public static class DependencyInjection
         
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
-        services.AddScoped<CodeGenerator>();
+        services.AddScoped<ICodeGenerator, CodeGenerator>();
         services.AddScoped<IUrlShorteningGenerator, UrlShorteningGenerator>();
         
         return services;
