@@ -13,7 +13,7 @@ public static class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        ConfigureServices(builder.Services, builder.Configuration);
+        ConfigureServices(builder.Services);
 
         var app = builder.Build();
         ConfigureApp(app);
@@ -22,7 +22,7 @@ public static class Program
         app.Run();
     }
 
-    private static void ConfigureServices(IServiceCollection services, IConfigurationManager configuration)
+    private static void ConfigureServices(IServiceCollection services)
     {
         services.AddCors(options =>
         {
@@ -40,8 +40,8 @@ public static class Program
         services.AddSwaggerGen();
         
         services.AddApplication()
-            .AddInfrastructure(configuration)
-            .AddPersistence(configuration)
+            .AddInfrastructure()
+            .AddPersistence()
             .AddDomain();
     }
 

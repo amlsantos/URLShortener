@@ -12,7 +12,7 @@ namespace Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfigurationManager manager)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
         services.AddScoped<IConsoleLogger, ConsoleLogger>();
