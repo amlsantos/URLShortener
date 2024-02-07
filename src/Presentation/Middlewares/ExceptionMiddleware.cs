@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Application.Exceptions;
 using Application.Interfaces;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Presentation.Common;
 
 namespace Presentation.Middlewares;
@@ -18,15 +19,16 @@ public class ExceptionMiddleware
         }
         catch (Exception e)
         {
-            consoleLogger.LogError(e, e.Message);
-            await HandleExceptionAsync(context, e);
+            await HandleExceptionAsync(context, consoleLogger, e);
         }
     }
 
-    private async Task HandleExceptionAsync(HttpContext httpContext, Exception exception)
+    private async Task HandleExceptionAsync(HttpContext httpContext, IConsoleLogger consoleLogger, Exception exception)
     {
+        var request = httpContext.Request.Path.Value ?? string.Empty;
+        consoleLogger.LogError(exception, $"there was an error while executing the request: {request} with exception message: {exception.Message}");
+        
         var response = Envelope.Error(exception.Message, GetErrors(exception));
-
         httpContext.Response.ContentType = "application/json";
         httpContext.Response.StatusCode = response.StatusCode;
 

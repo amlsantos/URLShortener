@@ -20,7 +20,7 @@ public abstract class BaseController : ControllerBase
         return base.Ok(Envelope.Success(result));
     }
 
-    protected IActionResult Error(string errorMessage)
+    protected IActionResult Failure(string errorMessage)
     {
         return BadRequest(Envelope.Error(errorMessage));
     }

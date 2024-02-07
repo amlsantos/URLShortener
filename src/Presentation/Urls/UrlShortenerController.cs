@@ -27,20 +27,21 @@ public class UrlShortenerController : BaseController
         _logger.LogInformation($"starting UrlShortenerController.Get:{shortUrl}");
         
         var query = new GetUrl { ShortUrl = shortUrl };
-        var response = await _mediator.Send(query);
-        if (response.IsFailure)
+        var responseOrError = await _mediator.Send(query);
+        if (responseOrError.IsFailure)
         {
-            _logger.LogError($"error UrlShortenerController.Get:{shortUrl}, error: {response.Error}");
-            return Error(response.Error);
+            _logger.LogError($"error UrlShortenerController.Get:{shortUrl}, error: {responseOrError.Error}");
+            return Failure(responseOrError.Error);
         }
 
-        _logger.LogInformation($"success UrlShortenerController.Get:{shortUrl}: {response.Value.LongUrl}");
-        var dto = new ShortenUrlResponse
+        _logger.LogInformation($"success UrlShortenerController.Get:{shortUrl}: {responseOrError.Value.LongUrl}");
+        var response = new ShortenUrlResponse
         {
-            OriginalUrl = response.Value.LongUrl,
-            ShortenUrl = response.Value.ShortUrl
+            OriginalUrl = responseOrError.Value.LongUrl,
+            ShortenUrl = responseOrError.Value.ShortUrl
         };
-        return await Success(dto);
+        
+        return await Success(response);
     }
     
     [HttpPost("[action]")]
@@ -49,19 +50,20 @@ public class UrlShortenerController : BaseController
         _logger.LogInformation($"starting UrlShortenerController.Create:{request.Url}");
         
         var command = new CreateUrl { Url = request.Url };
-        var response = await _mediator.Send(command);
-        if (response.IsFailure)
+        var responseOrError = await _mediator.Send(command);
+        if (responseOrError.IsFailure)
         {
-            _logger.LogError($" error UrlShortenerController.Create:{request.Url}, error: {response.Error}");
-            return Error(response.Error);
+            _logger.LogError($" error UrlShortenerController.Create:{request.Url}, error: {responseOrError.Error}");
+            return Failure(responseOrError.Error);
         }
         
-        _logger.LogInformation($"success UrlShortenerController.Create:{request.Url}, value: {response.Value.LongUrl}");
-        var dto = new ShortenUrlResponse
+        _logger.LogInformation($"success UrlShortenerController.Create:{request.Url}, value: {responseOrError.Value.LongUrl}");
+        var response = new ShortenUrlResponse
         {
-            OriginalUrl = response.Value.LongUrl,
-            ShortenUrl = response.Value.ShortUrl
+            OriginalUrl = responseOrError.Value.LongUrl,
+            ShortenUrl = responseOrError.Value.ShortUrl
         };
-        return await Success(dto);
+        
+        return await Success(response);
     }
 }
