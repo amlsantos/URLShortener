@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Infrastructure.Behaviours;
 using Infrastructure.Loggers;
+using Infrastructure.Loggers.Configurations;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -16,8 +17,8 @@ public static class DependencyInjection
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
         services.AddScoped<IConsoleLogger, ConsoleLogger>();
         services.Decorate<IConsoleLogger, WatchDogLogger>();
-        
-        services.Configure<WatchdogOptions>(manager.GetSection(WatchdogOptions.Watchdog));
+
+        services.ConfigureOptions<WatchdogOptionsSetup>();
         services.AddWatchDogServices();
         
         return services;

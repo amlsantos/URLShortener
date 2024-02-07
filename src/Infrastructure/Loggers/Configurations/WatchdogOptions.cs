@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Loggers;
+﻿namespace Infrastructure.Loggers.Configurations;
 
 public class WatchdogOptions
 {
