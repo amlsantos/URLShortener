@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using Domain.Urls;
-using Infrastructure.Users;
+using Domain.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

@@ -1,4 +1,4 @@
-﻿using Infrastructure.Users;
+﻿using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,8 +11,5 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         entity.HasIndex(e => e.Id).IsUnique();
         entity.HasKey(e => e.Id);
         entity.Property(e => e.Id).IsRequired();
-
-        entity.Ignore(e => e.UserEmail);
-        entity.Ignore(e => e.Name);
     }
 }

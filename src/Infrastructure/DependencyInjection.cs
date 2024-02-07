@@ -2,6 +2,7 @@
 using Infrastructure.Behaviours;
 using Infrastructure.Loggers;
 using Infrastructure.Loggers.Configurations;
+using Infrastructure.Users;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +21,8 @@ public static class DependencyInjection
 
         services.ConfigureOptions<WatchdogOptionsSetup>();
         services.AddWatchDogServices();
+
+        services.AddScoped<IJwtProvider, JwtProvider>();
         
         return services;
     }

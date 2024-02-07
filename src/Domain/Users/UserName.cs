@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace Infrastructure.Users;
+namespace Domain.Users;
 
 public class UserName : ValueObject<UserName>
 {

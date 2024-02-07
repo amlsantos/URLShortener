@@ -1,7 +1,7 @@
 ﻿using System.Net.Mail;
 using CSharpFunctionalExtensions;
 
-namespace Infrastructure.Users;
+namespace Domain.Users;
 
 public class UserEmail : ValueObject<UserEmail>
 {

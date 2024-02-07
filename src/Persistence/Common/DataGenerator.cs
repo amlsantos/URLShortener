@@ -1,5 +1,5 @@
 ﻿using Bogus;
-using Infrastructure.Users;
+using Domain.Users;
 using Microsoft.AspNetCore.Identity;
 
 namespace Persistence.Common;
