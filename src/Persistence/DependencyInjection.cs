@@ -1,4 +1,6 @@
 ﻿using Application.Interfaces;
+using Infrastructure.Users;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Common;
 using Persistence.Common.Configurations;
@@ -11,8 +13,13 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddPersistence(this IServiceCollection services)
     {
+        services.AddScoped<IDataGenerator, DataGenerator>();
         services.ConfigureOptions<ConnectionStringsOptionsSetup>();
         services.AddDbContext<ApplicationDbContext>();
+        
+        services
+            .AddIdentity<User, IdentityRole<Guid>>(options => options.SignIn.RequireConfirmedAccount = true)
+            .AddEntityFrameworkStores<ApplicationDbContext>();
         
         services.ConfigureOptions<CacheEntryOptionsSetup>();
         services.AddMemoryCache();
