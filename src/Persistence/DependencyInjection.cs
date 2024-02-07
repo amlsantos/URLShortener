@@ -1,9 +1,10 @@
 ﻿using Application.Interfaces;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Common;
+using Persistence.Common.Configurations;
 using Persistence.Urls;
+using Persistence.Urls.Configurations;
 
 namespace Persistence;
 
@@ -11,10 +12,10 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfigurationManager manager)
     {
-        services.Configure<ConnectionStringsOptions>(manager.GetSection(ConnectionStringsOptions.ConnectionStrings));
+        services.ConfigureOptions<ConnectionStringsOptionsSetup>();
         services.AddDbContext<ApplicationDbContext>();
 
-        services.Configure<CacheEntryOptions>(manager.GetSection(CacheEntryOptions.MemoryCacheEntry));
+        services.ConfigureOptions<CacheEntryOptionsSetup>();
         services.AddMemoryCache();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();

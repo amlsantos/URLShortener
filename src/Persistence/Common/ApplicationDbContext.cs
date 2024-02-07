@@ -2,6 +2,7 @@
 using Domain.Urls;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Persistence.Common.Configurations;
 
 namespace Persistence.Common;
 

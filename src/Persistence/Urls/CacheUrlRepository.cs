@@ -3,6 +3,7 @@ using CSharpFunctionalExtensions;
 using Domain.Urls;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
+using Persistence.Urls.Configurations;
 
 namespace Persistence.Urls;
 
@@ -49,16 +50,7 @@ public class CacheUrlRepository : IShortenedUrlRepository
 
     public async Task<bool> HasUrlAsync(Url url)
     {
-        var key = url.Value();
-
-        var isPresent = _memoryCache.TryGetValue(key, out bool result);
-        if (isPresent)
-            return result;
-
-        var hasUrl = await _repository.HasUrlAsync(url);
-        // _memoryCache.Set(key, hasUrl, _options);
-
-        return hasUrl;
+        return await _repository.HasUrlAsync(url);
     }
 
     public async Task AddAsync(ShortenedUrl url)
