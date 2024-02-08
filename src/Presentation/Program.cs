@@ -1,9 +1,12 @@
 using Application;
 using Domain;
 using Infrastructure;
+using Infrastructure.Users.Configurations;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Persistence.Common;
+using Presentation.Configurations;
 using Presentation.Middlewares;
 
 namespace Presentation;
@@ -24,25 +27,24 @@ public static class Program
 
     private static void ConfigureServices(IServiceCollection services)
     {
-        services.AddCors(options =>
-        {
-            options.AddPolicy("AllowAllHeaders", builder =>
-                {
-                    builder.AllowAnyOrigin()
-                        .AllowAnyHeader()
-                        .AllowAnyMethod();
-                }
-            );
-        });
+        services.AddCors();
+        services.ConfigureOptions<CorsOptionsSetup>();
 
         services.AddControllers();
         services.AddEndpointsApiExplorer();
+        
         services.AddSwaggerGen();
+        services.ConfigureOptions<SwaggerGenOptionsSetup>();
         
         services.AddApplication()
             .AddInfrastructure()
             .AddPersistence()
             .AddDomain();
+
+        services.ConfigureOptions<JwtOptionsSetup>();
+        services.ConfigureOptions<JwtBearerOptionsSetup>();
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+        services.AddAuthorization();
     }
 
     private static void ConfigureApp(WebApplication app)
@@ -56,6 +58,9 @@ public static class Program
         app.UseMiddleware<ExceptionMiddleware>();
         app.UseInfrastructure();
         app.UseHttpsRedirection();
+        
+        app.UseAuthentication();
+        app.UseAuthorization();
         
         app.MapControllers();
     }

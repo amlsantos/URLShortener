@@ -4,14 +4,22 @@ using System.Text;
 using Application.Interfaces;
 using CSharpFunctionalExtensions;
 using Domain.Users;
+using Infrastructure.Users.Configurations;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Users;
 
 public class JwtProvider : IJwtProvider
 {
+    private readonly JwtOptions _options;
     private readonly JwtSecurityTokenHandler _handler;
-    public JwtProvider(JwtSecurityTokenHandler handler) => _handler = handler;
+
+    public JwtProvider(JwtSecurityTokenHandler handler, IOptions<JwtOptions> options)
+    {
+        _handler = handler;
+        _options = options.Value;
+    }
 
     public Result<Token> Generate(User user)
     {
@@ -21,10 +29,10 @@ public class JwtProvider : IJwtProvider
             new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty)
         };
         
-        var secret = Encoding.UTF8.GetBytes("d5sd5s5ds5d5s5ds5d5s5ds5d5s5d5s5ds5d5sad");
+        var secret = Encoding.UTF8.GetBytes(_options.ScretKey);
         var key = new SymmetricSecurityKey(secret);
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var securityToken = new JwtSecurityToken("issuer", "audience", claims, DateTime.UtcNow, DateTime.UtcNow.AddMinutes(1), credentials);
+        var securityToken = new JwtSecurityToken(_options.Issuer, _options.Audience, claims, DateTime.UtcNow, DateTime.UtcNow.AddMinutes(_options.AccessTokenExpiration), credentials);
         var tokenValue = _handler.WriteToken(securityToken);
         
         var tokenOrError = Token.Create(tokenValue);

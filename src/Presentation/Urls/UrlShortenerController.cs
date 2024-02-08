@@ -2,6 +2,8 @@
 using Application.UseCases.Urls.Commands;
 using Application.UseCases.Urls.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Common;
 using Presentation.Urls.Contracts;
@@ -10,6 +12,7 @@ namespace Presentation.Urls;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class UrlShortenerController : BaseController
 {
     private readonly ISender _mediator;

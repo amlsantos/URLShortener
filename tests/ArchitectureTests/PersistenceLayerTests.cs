@@ -48,16 +48,33 @@ public class PersistenceLayerTests
     public void PersistenceLayer_ShouldDependOn_DomainLayer()
     {
         // arrange
-        var infrastructure = Assembly.GetAssembly(typeof(Infrastructure.DependencyInjection));
-        var application = Assembly.GetAssembly(typeof(Application.DependencyInjection));
-        const string options = "Options";
+        var persistence = Assembly.GetAssembly(typeof(Persistence.DependencyInjection));
+        var domain = Assembly.GetAssembly(typeof(Domain.DependencyInjection));
+        const string repository = "Repository";
         
         // act
-        var result = Types.InAssembly(infrastructure)
+        var result = Types.InAssembly(persistence)
             .That()
-            .DoNotHaveNameEndingWith(options)
+            .HaveNameEndingWith(repository)
             .Should()
-            .HaveDependencyOn(application.GetName().Name)
+            .HaveDependencyOn(domain.GetName().Name)
+            .GetResult();
+        
+        // assert
+        result.IsSuccessful.Should().BeTrue();
+    }
+
+    [Fact]
+    public void PersistenceLayer_ShouldNotDependOn_InfrastructureLayer()
+    {
+        // arrange
+        var persistence = Assembly.GetAssembly(typeof(Persistence.DependencyInjection));
+        var infrastructure = Assembly.GetAssembly(typeof(Infrastructure.DependencyInjection));
+        
+        // act
+        var result = Types.InAssembly(persistence)
+            .ShouldNot()
+            .HaveDependencyOn(infrastructure.GetName().Name)
             .GetResult();
         
         // assert

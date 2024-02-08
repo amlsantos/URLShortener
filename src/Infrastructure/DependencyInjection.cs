@@ -4,7 +4,9 @@ using Infrastructure.Behaviours;
 using Infrastructure.Loggers;
 using Infrastructure.Loggers.Configurations;
 using Infrastructure.Users;
+using Infrastructure.Users.Configurations;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +24,7 @@ public static class DependencyInjection
 
         services.ConfigureOptions<WatchdogOptionsSetup>();
         services.AddWatchDogServices();
-
+        
         services.AddScoped<JwtSecurityTokenHandler>();
         services.AddScoped<IJwtProvider, JwtProvider>();
         
