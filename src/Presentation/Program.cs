@@ -1,8 +1,6 @@
 using Application;
 using Domain;
 using Infrastructure;
-using Infrastructure.Users.Configurations;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Persistence.Common;
