@@ -53,10 +53,6 @@ public static class Program
         app.UseMiddleware<ExceptionMiddleware>();
         app.UseInfrastructure();
         app.UseHttpsRedirection();
-        
-        app.UseAuthentication();
-        app.UseAuthorization();
-        
         app.MapControllers();
     }
 

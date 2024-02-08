@@ -50,6 +50,9 @@ public static class DependencyInjection
             options.WatchPagePassword = watchDogOptions.PagePassword;
         });
         
+        app.UseAuthentication();
+        app.UseAuthorization();
+        
         return app;
     }
 }
