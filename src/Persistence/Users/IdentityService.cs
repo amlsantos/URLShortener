@@ -17,4 +17,14 @@ public class IdentityService : IIdentityService
         var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserEmail.Value == email.Value);
         return Maybe<User>.From(user);
     }
+
+    public async Task<Result> Add(User user)
+    {
+        var resultOrError = await _userManager.CreateAsync(user);
+        if (resultOrError.Succeeded)
+            return Result.Success();
+        
+        var errors = resultOrError.Errors.Select(e => e.Description);
+        return Result.Failure(string.Join(",", errors.ToArray() ));
+    }
 }
