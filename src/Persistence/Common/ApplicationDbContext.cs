@@ -11,12 +11,10 @@ namespace Persistence.Common;
 
 public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {
-    private readonly IDataGenerator _initializer;
     private readonly ConnectionStringsOptions _options;
     
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> contextOptions, IDataGenerator initializer, IOptions<ConnectionStringsOptions> options) : base(contextOptions)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> contextOptions, IOptions<ConnectionStringsOptions> options) : base(contextOptions)
     {
-        _initializer = initializer;
         _options = options.Value;
     }
 
@@ -32,11 +30,8 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, 
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        base.OnModelCreating(builder);
-        
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        
-        _initializer.GenerateData();
-        builder.Entity<User>().HasData(_initializer.Users);
+
+        base.OnModelCreating(builder);
     }
 }

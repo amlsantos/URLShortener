@@ -11,11 +11,7 @@ namespace Infrastructure.Users;
 public class JwtProvider : IJwtProvider
 {
     private readonly JwtSecurityTokenHandler _handler;
-    
-    public JwtProvider()
-    {
-        _handler = new JwtSecurityTokenHandler();
-    }
+    public JwtProvider(JwtSecurityTokenHandler handler) => _handler = handler;
 
     public Result<Token> Generate(User user)
     {

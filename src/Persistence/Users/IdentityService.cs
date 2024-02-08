@@ -14,7 +14,7 @@ public class IdentityService : IIdentityService
 
     public async Task<Maybe<User>> GetUserByEmailAsync(UserEmail email)
     {
-        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == email.Value());
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserEmail.Value == email.Value);
         return Maybe<User>.From(user);
     }
 }

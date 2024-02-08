@@ -17,8 +17,8 @@ public static class Program
 
         var app = builder.Build();
         ConfigureApp(app);
-        RunMigrations(app);
         
+        RunMigrations(app);
         app.Run();
     }
 
@@ -64,7 +64,8 @@ public static class Program
     {
         using var scope = app.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-        context.Database.Migrate();
+        
+        context.Database.MigrateAsync();
+        DataGenerator.SeedDatabase(context);
     }
 }

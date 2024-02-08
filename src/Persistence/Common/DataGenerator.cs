@@ -1,43 +1,32 @@
 ﻿using Bogus;
 using Domain.Users;
-using Microsoft.AspNetCore.Identity;
 
 namespace Persistence.Common;
 
-public class DataGenerator : IDataGenerator
+public static class DataGenerator
 {
-    public void GenerateData()
-    {
-        Users = GenerateUsers();
-    }
-
-    private List<User> GenerateUsers()
-    {
-        var user = new User("username", "username@email.com");
-        var hasher = new PasswordHasher<User>();
-
-        var userFaker = new Faker<User>()
-            .CustomInstantiator(f => new User(f.Person.UserName, f.Person.Email))
-            .RuleFor(t => t.Id, f => Guid.NewGuid())
-            .RuleFor(t => t.UserName, f => f.Person.UserName)
-            .RuleFor(t => t.NormalizedUserName, f => f.Person.UserName.ToUpper())
-            .RuleFor(t => t.Email, f => f.Person.Email)
-            .RuleFor(t => t.NormalizedEmail, f => f.Person.Email.ToLower())
-            .RuleFor(t => t.PasswordHash, f => hasher.HashPassword(user, "password"))
-            .RuleFor(t => t.EmailConfirmed, f => f.Random.Bool())
-            .RuleFor(t => t.PhoneNumber, f => f.Person.Phone)
-            .RuleFor(t => t.PhoneNumberConfirmed, f => f.Random.Bool())
-            .RuleFor(t => t.TwoFactorEnabled, f => f.Random.Bool());
-
-        return userFaker.GenerateBetween(30, 50);
-    }
-
-    public IReadOnlyList<User> Users { get; private set; }
-}
-
-public interface IDataGenerator
-{
-    public void GenerateData();
+    private const string Username = "username";
+    private const string Email = "username@email.com";
     
-    IReadOnlyList<User> Users { get; }
+    public static void SeedDatabase(ApplicationDbContext context)
+    {
+        SeedUsers(context);
+    }
+
+    private static void SeedUsers(ApplicationDbContext context)
+    {
+        if (context.Users.Any())
+            return;
+        
+        var userFaker = new Faker<User>()
+            .CustomInstantiator(f =>
+                new User(UserName.Create(f.Person.UserName).Value, UserEmail.Create(f.Person.Email).Value))
+            .RuleFor(t => t.Id, f => Guid.NewGuid());
+        
+        var users = userFaker.GenerateBetween(30, 50);
+        users.Add(new User(UserName.Create(Username).Value, UserEmail.Create(Email).Value));
+            
+        context.AddRange(users);
+        context.SaveChanges();
+    }
 }

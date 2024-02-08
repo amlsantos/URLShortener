@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using System.IdentityModel.Tokens.Jwt;
+using Application.Interfaces;
 using Infrastructure.Behaviours;
 using Infrastructure.Loggers;
 using Infrastructure.Loggers.Configurations;
@@ -22,6 +23,7 @@ public static class DependencyInjection
         services.ConfigureOptions<WatchdogOptionsSetup>();
         services.AddWatchDogServices();
 
+        services.AddScoped<JwtSecurityTokenHandler>();
         services.AddScoped<IJwtProvider, JwtProvider>();
         
         return services;

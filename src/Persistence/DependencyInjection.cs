@@ -14,9 +14,11 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddPersistence(this IServiceCollection services)
     {
-        services.AddSingleton<IDataGenerator, DataGenerator>();
         services.ConfigureOptions<ConnectionStringsOptionsSetup>();
-        services.AddDbContext<ApplicationDbContext>();
+        services.AddDbContext<ApplicationDbContext>(options =>
+        {
+            options.EnableSensitiveDataLogging();
+        });
         
         services
             .AddIdentity<User, IdentityRole<Guid>>(options => options.SignIn.RequireConfirmedAccount = true)
