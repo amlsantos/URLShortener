@@ -40,11 +40,6 @@ public static class Program
             .AddInfrastructure()
             .AddPersistence()
             .AddDomain();
-
-        services.ConfigureOptions<JwtOptionsSetup>();
-        services.ConfigureOptions<JwtBearerOptionsSetup>();
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
-        services.AddAuthorization();
     }
 
     private static void ConfigureApp(WebApplication app)

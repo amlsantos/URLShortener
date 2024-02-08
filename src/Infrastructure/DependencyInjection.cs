@@ -28,6 +28,11 @@ public static class DependencyInjection
         services.AddScoped<JwtSecurityTokenHandler>();
         services.AddScoped<IJwtProvider, JwtProvider>();
         
+        services.ConfigureOptions<JwtOptionsSetup>();
+        services.ConfigureOptions<JwtBearerOptionsSetup>();
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+        services.AddAuthorization();
+        
         return services;
     }
 
