@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using Application.Interfaces;
 using Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
