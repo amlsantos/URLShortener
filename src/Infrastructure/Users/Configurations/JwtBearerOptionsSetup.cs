@@ -24,6 +24,7 @@ public class JwtBearerOptionsSetup : IConfigureNamedOptions<JwtBearerOptions>
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
+            ClockSkew = TimeSpan.Zero,
             ValidIssuer = _jwtOptions.Issuer,
             ValidAudience = _jwtOptions.Audience,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.ScretKey))
@@ -39,44 +40,32 @@ public class JwtBearerOptionsSetup : IConfigureNamedOptions<JwtBearerOptions>
 
     private static Task HandleForbidden(ForbiddenContext context)
     {
-        context.Response.StatusCode = StatusCodes.Status403Forbidden;
-        context.Response.ContentType = "application/json";
-        
         throw new AuthenticationException("Forbidden", "You dont have permissions to access this resource");
     }
 
     private static Task HandleChallenge(JwtBearerChallengeContext context)
     {
         context.HandleResponse();
-        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-        context.Response.ContentType = "application/json";
 
-        // Ensure we always have an error and error description.
         if (string.IsNullOrEmpty(context.Error))
-            context.Error = "invalid_token";
+            context.Error = "Invalid token";
         if (string.IsNullOrEmpty(context.ErrorDescription))
             context.ErrorDescription = "This request requires a valid JWT access token to be provided";
 
-        // Add some extra context for expired tokens.
-        if (context.AuthenticateFailure is not null && context.AuthenticateFailure.GetType() ==
-            typeof(SecurityTokenExpiredException))
+        if (context.AuthenticateFailure is not null && context.AuthenticateFailure.GetType() == typeof(SecurityTokenExpiredException))
         {
             var inner = context.AuthenticateFailure as SecurityTokenExpiredException;
-            context.Response.Headers.Add("x-token-expired", inner.Expires.ToString("o"));
-            context.ErrorDescription = $"The token expired on {inner.Expires.ToString("o")}";
+            context.ErrorDescription = $"The token expired on {inner?.Expires:o}";
             
-            throw new AuthenticationException(context.Error, context.ErrorDescription, inner);
+            throw new AuthenticationException(context.Error, $"Invalid token: {context.ErrorDescription}", inner);
         }
 
-        throw new AuthenticationException(context.Error, context.ErrorDescription);
+        throw new AuthenticationException(context.Error, $"Invalid token: {context.ErrorDescription}");
     }
 
     private Task HandleAuthenticationFailed(AuthenticationFailedContext context)
     {
-        context.Response.StatusCode = StatusCodes.Status403Forbidden;
-        context.Response.ContentType = "application/json";
-        
-        throw new AuthenticationException("Invalid token", context.Exception.Message);
+        throw new AuthenticationException("Invalid token", $"Invalid token: {context.Exception.Message}");
     }
 
     public void Configure(string? name, JwtBearerOptions options) => Configure(options);
