@@ -33,8 +33,20 @@ public class JwtProvider : IJwtProvider
         var key = new SymmetricSecurityKey(secret);
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var securityToken = new JwtSecurityToken(_options.Issuer, _options.Audience, claims, DateTime.UtcNow, DateTime.UtcNow.AddMinutes(_options.AccessTokenExpiration), credentials);
-        var tokenValue = _handler.WriteToken(securityToken);
         
+        try
+        {
+            return TryCreate(securityToken);
+        }
+        catch (Exception e)
+        {
+            return Result.Failure<Token>(e.Message);
+        }
+    }
+
+    private Result<Token> TryCreate(JwtSecurityToken securityToken)
+    {
+        var tokenValue = _handler.WriteToken(securityToken);
         var tokenOrError = Token.Create(tokenValue);
         if (tokenOrError.IsFailure)
             return Result.Failure<Token>(tokenOrError.Error);
