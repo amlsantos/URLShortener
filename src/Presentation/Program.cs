@@ -1,9 +1,7 @@
 using Application;
 using Domain;
 using Infrastructure;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
-using Persistence.Common;
 using Presentation.Configurations;
 using Presentation.Middlewares;
 
@@ -18,8 +16,7 @@ public static class Program
 
         var app = builder.Build();
         ConfigureApp(app);
-        
-        RunMigrations(app);
+
         app.Run();
     }
 
@@ -49,17 +46,9 @@ public static class Program
         }
 
         app.UseMiddleware<ExceptionMiddleware>();
-        app.UseInfrastructure();
+        app.UseInfrastructure()
+            .UsePersistence();
         app.UseHttpsRedirection();
         app.MapControllers();
-    }
-
-    private static void RunMigrations(IHost app)
-    {
-        using var scope = app.Services.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        
-        context.Database.MigrateAsync();
-        DataGenerator.SeedDatabase(context);
     }
 }
