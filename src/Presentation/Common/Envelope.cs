@@ -20,9 +20,9 @@ public class Envelope<T>
 
 public class Envelope : Envelope<string>
 {
-    private Envelope() : base(null, 200, string.Empty, new Dictionary<string, string[]>()) { }
+    private Envelope() : base(string.Empty, 200, string.Empty, new Dictionary<string, string[]>()) { }
 
-    private Envelope(string errorMessage, IReadOnlyDictionary<string, string[]> validationErrors) : base(null, 400, errorMessage, validationErrors) { }
+    private Envelope(string errorMessage, IReadOnlyDictionary<string, string[]> validationErrors) : base(string.Empty, 400, errorMessage, validationErrors) { }
 
     public static Envelope Success()
     {
