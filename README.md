@@ -21,7 +21,7 @@ The URL Shortener system follows the principles of Clean Architecture, which pro
 - **Persistence Layer (Client Interface)**: Responsible for persisting URLs and user-related data. It includes the necessary infrastructure for interacting with the database, such as data access objects and repositories.
 - **Infrastructure Layer (Client Interface)**: Provides implementations for external dependencies such as authentication, authorization, and token generation. It includes adapters and gateways to interact with external systems.
 - **Domain Layer**: Contains the core business logic and domain entities of the application. It encapsulates the behavior and rules that govern the application's functionality, ensuring separation of concerns and maintainability.
-- 
+
 ## System Design
 
 ## 1. Shortening Process:
@@ -74,7 +74,7 @@ URLShortener/
 │   │   │   │   ├── .../         # ...
 │   │   ├── Behaviors/           # MediatR behaviors
 │   │   ├── Exceptions/          # Custom application exceptions
-│   │   └── Interfaces/          # Application ,infrastucture and persistence interfaces
+│   │   └── Interfaces/          # Application, infrastucture and persistence interfaces
 │   │
 │   ├── Domain/                  # Domain layer
 │   │   ├── Urls/                # Domain url entities and value objects
@@ -88,8 +88,8 @@ URLShortener/
 │   │
 │   ├── Persistence/            # Persistence layer
 │   │   ├── Migrations/         # Database migrations
-│   │   ├── Urls/               # Urls and cached repository. Mappings for ORM
-│   │   ├── Users/              # Users repository. Mappings for ORM
+│   │   ├── Urls/               # Urls and cached repository. Mappings for EF ORM
+│   │   ├── Users/              # Users repository. Mappings for EF ORM
 │   │
 │   ├── Presentation/           # Presentation layer (Client Interface)
 │   │   ├── Urls/               # Urls controller and data contracts
@@ -114,6 +114,44 @@ URLShortener/
 - Horizontal Scaling: Scale the system horizontally by adding more servers to handle increased traffic and load.
 - Integration testing && unit testing: No time
 - Health checks
+
+## Getting Started
+
+### Prerequisites
+
+Make sure you have the following installed on your machine:
+
+- [.NET](https://dotnet.microsoft.com/download)
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/amlsantos/URLShortener.git
+cd URLShortener
+```
+
+### Build and Run Tests
+```bash
+dotnet build
+dotnet test
+```
+
+### Run App
+```bash
+dotnet run --project .\src\Presentation\Presentation.csproj
+```
+
+### Logging
+
+Go to http://localhost:5018/watchdog to use the log viewer:
+
+- username: `admin`
+- password: `admin`
+
+### Authentication
+You can use the 'login' endpoint, to generate an access token: 'UsersController/Login'.
+You will need to use an already registered users email:
+- `username@email.com`
 
 ## Acknowledgments
 
