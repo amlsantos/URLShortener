@@ -18,8 +18,6 @@ public static class DependencyInjection
         services.AddValidatorsFromAssembly(assembly);
         
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
-
-        services.AddScoped<ICodeGenerator, CodeGenerator>();
         services.AddScoped<IUrlShorteningGenerator, UrlShorteningGenerator>();
         
         return services;
