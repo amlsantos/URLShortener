@@ -5,9 +5,13 @@ name: test
 
 on:
   push:
-    branches: [ "main, authentication" ]
+    branches:
+      - 'main'
+      - 'authentication'
   pull_request:
-    branches: [ "main, authentication" ]
+    branches:
+      - 'main'
+      - 'authentication'
 
 jobs:
   build:
