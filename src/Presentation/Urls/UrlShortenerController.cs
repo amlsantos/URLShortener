@@ -25,7 +25,7 @@ public class UrlShortenerController : BaseController
     }
 
     [HttpGet("[action]")]
-    public async Task<IActionResult> Get(string shortUrl)
+    public new async Task<IActionResult> Redirect(string shortUrl)
     {
         _logger.LogInformation($"starting UrlShortenerController.Get:{shortUrl}");
         
@@ -48,7 +48,7 @@ public class UrlShortenerController : BaseController
     }
     
     [HttpPost("[action]")]
-    public async Task<IActionResult> Create(ShortenUrlRequest request)
+    public async Task<IActionResult> Shorten(ShortenUrlRequest request)
     {
         _logger.LogInformation($"starting UrlShortenerController.Create:{request.Url}");
         
